@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+//TODO interface für propertyMap etc; DB-Operationen statisch!
+//TODO bessere Idee: DataMapper Klassen => dynamisch auf den Mappern.
 public abstract class ARModel implements Serializable {
     /**
      * Ordne den Feldern eines Objekts Spalten der zugehörigen Datenbanktabelle zu
@@ -37,18 +39,9 @@ public abstract class ARModel implements Serializable {
         Class<? extends ARModel> klasse = this.getClass();
         Map<String, String> propertyMap = this.getPropertyMap();
         Set<String> keySet = propertyMap.keySet();
-        Collection<String> cols = propertyMap.values();
 
         //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
-        StringBuilder query = new StringBuilder("SELECT");
-        Iterator<String> colIt = cols.iterator();
-        while (colIt.hasNext()) {
-            query.append(" ").append(colIt.next());
-            if (colIt.hasNext()) {
-                query.append(",");
-            }
-        }
-        query.append(" FROM ").append(this.getTable());
+        StringBuilder query = this.getSelectHelp();
         query.append(" WHERE ").append(index).append("='").append(val).append("';");
 
         try {
@@ -80,6 +73,27 @@ public abstract class ARModel implements Serializable {
     public void getById(long id, Connection db) {
         this.getByKey("id", String.valueOf(id), db);
     }
+
+    /**
+     * Gebe eine Liste aller Datensätze aus; pagination
+     *
+     * @param db
+     */
+    /*public void getAll(Connection db) {
+        StringBuilder query = this.getSelectHelp();
+        query.append(";");
+
+        try {
+            Statement stmt = db.createStatement();
+            ResultSet res = stmt.executeQuery(query.toString());
+            //First, da bei id-Suche nur eine Zeile ausgelesen wird
+            while (res.next()) {
+
+            }
+        } catch(SQLException e) {
+            //TODO
+        }
+    }*/
 
     /**
      * Füge eine neue Zeile in die Datenbank ein
@@ -174,5 +188,23 @@ public abstract class ARModel implements Serializable {
         }
 
         return erg;
+    }
+
+    //Hilfsmethode, die den Beginn der SELECT query baut
+    private StringBuilder getSelectHelp() {
+        Collection<String> cols = this.getPropertyMap().values();
+
+        //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
+        StringBuilder query = new StringBuilder("SELECT");
+        Iterator<String> colIt = cols.iterator();
+        while (colIt.hasNext()) {
+            query.append(" ").append(colIt.next());
+            if (colIt.hasNext()) {
+                query.append(",");
+            }
+        }
+        query.append(" FROM ").append(this.getTable());
+
+        return query;
     }
 }

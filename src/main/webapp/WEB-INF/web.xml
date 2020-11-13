@@ -73,4 +73,14 @@
         <servlet-name>admin-std-controller</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>admin-user-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.users.UserListController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>admin-user-controller</servlet-name>
+        <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -13,6 +13,8 @@
 <%
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     User user = (User) session.getAttribute("user");
+    String uri = (String) session.getAttribute("uri");
+    String prefix = (String) request.getAttribute("contextPath");
 %>
 
 <html>
@@ -29,7 +31,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </head>
 <body class="bg-light">
-<jsp:include page="navigation.jsp"/>
+<% if (uri.startsWith(prefix + "/admin")) { %>
+    <jsp:include page="navigation_admin.jsp"/>
+<% } else { %>
+    <jsp:include page="navigation.jsp"/>
+<% } %>
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12 bg-white p-0">
