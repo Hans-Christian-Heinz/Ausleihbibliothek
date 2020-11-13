@@ -20,4 +20,9 @@ public class Book extends ARModel {
     public void setId(BigInteger id) {
         this.id = id;
     }
+
+    @Override
+    public BigInteger getId() {
+        return id;
+    }
 }

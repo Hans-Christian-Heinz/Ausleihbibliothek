@@ -94,6 +94,10 @@ public abstract class Validator {
                     }
                 }
                 else {
+                    //Überprüfen, ob der Wert für ein anderes Profil vorliegt
+                    if (count == 1) {
+                        //TODO
+                    }
                     if (count > 1) {
                         errors.put(key, "Der eingegebene Wert für " + key + " ist in der Datenbank bereits für einen anderen Datensatz vorhanden.");
                         return false;

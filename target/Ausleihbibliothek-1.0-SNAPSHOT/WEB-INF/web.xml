@@ -43,4 +43,14 @@
         <servlet-name>logout-controller</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>edit-profile-controller</servlet-name>
+        <servlet-class>
+            controllers.profile.EditProfileController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>edit-profile-controller</servlet-name>
+        <url-pattern>/profile/edit</url-pattern>
+    </servlet-mapping>
 </web-app>

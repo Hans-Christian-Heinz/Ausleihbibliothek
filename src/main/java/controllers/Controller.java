@@ -42,13 +42,23 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (istBerechtigt(req.getSession())) {
+        //get the contextPath of the servlet
+        req.setAttribute("contextPath", req.getContextPath());
+        HttpSession session = req.getSession();
+        session.setAttribute("uri", req.getRequestURI());
+
+        if (istBerechtigt(session)) {
             ServletContext context = this.getServletContext();
             RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
 
             req.setAttribute("tpl", this.tpl);
-            req.setAttribute("errors", new HashMap<>());
-            req.setAttribute("old", new HashMap<>());
+            if (session.getAttribute("keepErrors") != null && (boolean) session.getAttribute("keepErrors")) {
+                session.setAttribute("keepErrors", false);
+            }
+            else {
+                session.setAttribute("errors", new HashMap<>());
+                session.setAttribute("old", new HashMap<>());
+            }
 
             dispatcher.forward(req, resp);
         }
@@ -59,6 +69,17 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String redirect = (String) session.getAttribute("uri");
+        if (redirect == null) {
+            redirect = req.getRequestURI();
+        }
+        session.setAttribute("uri", req.getRequestURI());
+        req.setAttribute("redirect", redirect);
+
+        //get the contextPath  of the servlet
+        req.setAttribute("contextPath", req.getContextPath());
+
         if (istBerechtigt(req.getSession())) {
             String classname = this.getClass().getCanonicalName();
             String validatorname = classname.replaceFirst("controllers", "validators");
@@ -81,11 +102,7 @@ public abstract class Controller extends HttpServlet {
                 this.handlePost(req, resp);
             }
             else {
-                ServletContext context = this.getServletContext();
-                RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
-
-                req.setAttribute("tpl", this.tpl);
-                req.setAttribute("errors", validator.getErrors());
+                session.setAttribute("errors", validator.getErrors());
 
                 Map<String, String> old = new HashMap<>();
                 Enumeration<String> names = req.getParameterNames();
@@ -93,9 +110,12 @@ public abstract class Controller extends HttpServlet {
                     String key = names.nextElement();
                     old.put(key, req.getParameter(key));
                 }
-                req.setAttribute("old", old);
+                session.setAttribute("old", old);
 
-                dispatcher.forward(req, resp);
+                //redirect back
+                //Stelle sicher, dass errors und old in der Session nicht verworfen werden
+                session.setAttribute("keepErrors", true);
+                resp.sendRedirect(redirect);
             }
         }
         else {

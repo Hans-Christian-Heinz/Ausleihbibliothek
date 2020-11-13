@@ -31,6 +31,7 @@ public abstract class ARModel implements Serializable {
     protected abstract String getTable();
 
     public abstract void setId(BigInteger id);
+    public abstract BigInteger getId();
 
     public void getByKey(String index, String val, Connection db) {
         Class<? extends ARModel> klasse = this.getClass();
@@ -89,7 +90,6 @@ public abstract class ARModel implements Serializable {
         Class<? extends ARModel> klasse = this.getClass();
         Map<String, String> propertyMap = this.getPropertyMap();
         Set<String> keySet = propertyMap.keySet();
-        Collection<String> cols = propertyMap.values();
         boolean erg = false;
 
         //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
@@ -129,6 +129,46 @@ public abstract class ARModel implements Serializable {
                     this.setId(BigInteger.valueOf(-1));
                 }
             }
+        } catch(SQLException e) {
+            //TODO
+        }
+
+        return erg;
+    }
+
+    /**
+     * Aktualisiere eine vorhandene Zeile in der Datenbank
+     *
+     * @param db
+     */
+    public boolean update(Connection db) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<? extends ARModel> klasse = this.getClass();
+        Map<String, String> propertyMap = this.getPropertyMap();
+        Set<String> keySet = propertyMap.keySet();
+        boolean erg = false;
+
+        //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
+        StringBuilder query = new StringBuilder("UPDATE ").append(this.getTable()) .append(" SET ");
+        Iterator<String> keyIt = keySet.iterator();
+        while (keyIt.hasNext()) {
+            String key = keyIt.next();
+            if (! key.equals("id")) {
+                Method getter =
+                        klasse.getDeclaredMethod("get" + key.substring(0, 1).toUpperCase() + key.substring(1));
+                Object value = getter.invoke(this);
+                if (value != null) {
+                    query.append(propertyMap.get(key)).append("='").append(value.toString()).append("'");
+                    if (keyIt.hasNext()) {
+                        query.append(", ");
+                    }
+                }
+            }
+        }
+        query.append(" WHERE id=").append(this.getId()).append(";");
+
+        try {
+            Statement stmt = db.createStatement();
+            erg = stmt.execute(query.toString());
         } catch(SQLException e) {
             //TODO
         }
