@@ -31,15 +31,14 @@ public class LoginController extends Controller {
 
                 resp.sendRedirect("home");
             }
-            //Wenn das Passwort nicht stimmt, wird hier die Funktionalität von Controller doGet() nachgeahmt.
+            //Wenn das Passwort nicht stimmt: redirect back
             else {
-                ServletContext context = this.getServletContext();
-                RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
+                HttpSession session = req.getSession();
 
-                req.setAttribute("tpl", this.tpl);
-                ((Map<String, String>)req.getAttribute("errors")).put("password", "Das Passwort stimmt nicht.");
-                ((Map<String, String>)req.getAttribute("old")).put("username", req.getParameter("username"));
-                dispatcher.forward(req, resp);
+                ((Map<String, String>)session.getAttribute("errors")).put("password", "Das Passwort stimmt nicht.");
+                ((Map<String, String>)session.getAttribute("old")).put("username", req.getParameter("username"));
+                session.setAttribute("keepErrors", true);
+                resp.sendRedirect((String) req.getAttribute("redirect"));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -53,4 +53,14 @@
         <servlet-name>edit-profile-controller</servlet-name>
         <url-pattern>/profile/edit</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>change-password-controller</servlet-name>
+        <servlet-class>
+            controllers.profile.ChangePasswordController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>change-password-controller</servlet-name>
+        <url-pattern>/profile/pwd</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -21,8 +21,8 @@ public class EditProfileValidator extends Validator {
         valid = valid && validateUnique("username", new User(), false);
 
         if (! valid) {
-            //Fehlermeldung wird verwendet, um hoffentlich das Formular (modales Fenster) unmittelbar anzuzeigen.
-            errors.put("editProfile", "Beim Bearbeiten des Profils sind Fehler aufgetreten");
+            //Fehlermeldung wird verwendet, um das Formular (modales Fenster) unmittelbar anzuzeigen.
+            errors.put("modal", "editProfileModal");
         }
 
         return valid;

@@ -1,5 +1,6 @@
 <%@ page import="java.util.Map" %>
-<%@ page import="models.User" %><%--
+<%@ page import="models.User" %>
+<%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 11.11.20
@@ -17,6 +18,8 @@
 <html>
 <head>
     <title>Ausleihbibliothek</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- bootstrap -->
     <!-- CSS -->
@@ -35,10 +38,11 @@
     </div>
 </div>
 
-<% if (user != null && errors.containsKey("editProfile")) { %>
+<%-- Wenn in einem Formular in einem modalen Fenster Validierungsfehler auftreten, zeige das modale fenster unmittelbar an --%>
+<% if (user != null && errors.containsKey("modal")) { %>
     <script type="text/javascript">
         $(window).on('load',function(){
-            $('#editProfileModal').modal('show');
+            $('#<%= errors.get("modal") %>').modal('show');
         });
     </script>
 <% } %>
