@@ -8,8 +8,8 @@
 --%>
 
 <%
-    Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
-    Map<String, String> old = (Map<String, String>) request.getAttribute("old");
+    Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
+    Map<String, String> old = (Map<String, String>) session.getAttribute("old");
 %>
 
 <div class="card">

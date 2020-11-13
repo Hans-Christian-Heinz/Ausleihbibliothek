@@ -7,12 +7,12 @@ public class Book extends ARModel {
     private BigInteger id;
 
     @Override
-    protected Map<String, String> getPropertyMap() {
+    public Map<String, String> getPropertyMap() {
         return null;
     }
 
     @Override
-    protected String getTable() {
+    public String getTable() {
         return "books";
     }
 

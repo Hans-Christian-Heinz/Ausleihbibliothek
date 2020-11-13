@@ -13,7 +13,7 @@ public class User extends ARModel {
     private String password;
 
     @Override
-    protected Map<String, String> getPropertyMap() {
+    public Map<String, String> getPropertyMap() {
         Map<String, String> res = new HashMap<>();
         res.put("id", "id");
         res.put("username", "username");
@@ -25,7 +25,7 @@ public class User extends ARModel {
     }
 
     @Override
-    protected String getTable() {
+    public String getTable() {
         return "users";
     }
 

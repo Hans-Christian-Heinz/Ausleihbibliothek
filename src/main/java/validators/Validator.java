@@ -73,14 +73,17 @@ public abstract class Validator {
      * Überprüfe, ob der Wert für key in der Datenbank bereits vorliegt
      *
      * @param key
-     * @param table
+     * @param model
      * @param insert
      * @return
      */
-    protected boolean validateUnique(String key, String table, boolean insert) {
+    protected boolean validateUnique(String key, ARModel model, boolean insert) {
+        String table = model.getTable();
+        String dbKey = model.getPropertyMap().get(key);
+
         try{
             String val = params.get(key)[0];
-            String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + key + "='" + val + "';";
+            String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + dbKey + "='" + val + "';";
             Statement stmt = db.createStatement();
             ResultSet res = stmt.executeQuery(query);
             //First, da nur eine Zeile ausgelesen wird
@@ -120,13 +123,16 @@ public abstract class Validator {
      * Stelle sicher, dass ein übergebner Wert in der Datenbank existiert.
      *
      * @param key
-     * @param table
+     * @param model
      * @return
      */
-    protected boolean validateExists(String key, String table) {
+    protected boolean validateExists(String key, ARModel model) {
+        String table = model.getTable();
+        String dbKey = model.getPropertyMap().get(key);
+
         try{
             String val = params.get(key)[0];
-            String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + key + "='" + val + "';";
+            String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + dbKey + "='" + val + "';";
             Statement stmt = db.createStatement();
             ResultSet res = stmt.executeQuery(query);
             //First, da nur eine Zeile ausgelesen wird

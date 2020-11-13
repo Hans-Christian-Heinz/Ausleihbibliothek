@@ -1,5 +1,6 @@
 package validators.auth;
 
+import models.User;
 import validators.Validator;
 
 import java.sql.Connection;
@@ -16,7 +17,7 @@ public class LoginValidator extends Validator {
 
         valid = valid && validateRequired("username");
         valid = valid && validateRequired("password");
-        valid = valid && validateExists("username", "users");
+        valid = valid && validateExists("username", new User());
 
         return valid;
     }

@@ -1,5 +1,6 @@
 package validators.profile;
 
+import models.User;
 import validators.Validator;
 
 import java.sql.Connection;
@@ -17,7 +18,7 @@ public class EditProfileValidator extends Validator {
         valid = valid && validateRequired("username");
         valid = valid && validateRequired("name");
         valid = valid && validateRequired("vorname");
-        valid = valid && validateUnique("username", "users", false);
+        valid = valid && validateUnique("username", new User(), false);
 
         if (! valid) {
             //Fehlermeldung wird verwendet, um hoffentlich das Formular (modales Fenster) unmittelbar anzuzeigen.

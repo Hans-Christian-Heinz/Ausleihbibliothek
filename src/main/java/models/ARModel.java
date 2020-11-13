@@ -21,14 +21,14 @@ public abstract class ARModel implements Serializable {
      *
      * @return
      */
-    protected abstract Map<String, String> getPropertyMap();
+    public abstract Map<String, String> getPropertyMap();
 
     /**
      * Gebe den Namen der zugehörigen Datenbanktabelle aus
      *
      * @return
      */
-    protected abstract String getTable();
+    public abstract String getTable();
 
     public abstract void setId(BigInteger id);
     public abstract BigInteger getId();

@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Map" %>
+<%@ page import="models.User" %><%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 11.11.20
@@ -7,6 +8,12 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
+    User user = (User) session.getAttribute("user");
+%>
+
 <html>
 <head>
     <title>Ausleihbibliothek</title>
@@ -27,5 +34,14 @@
         </div>
     </div>
 </div>
+
+<% if (user != null && errors.containsKey("editProfile")) { %>
+    <script type="text/javascript">
+        $(window).on('load',function(){
+            $('#editProfileModal').modal('show');
+        });
+    </script>
+<% } %>
+
 </body>
 </html>
