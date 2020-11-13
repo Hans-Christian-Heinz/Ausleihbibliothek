@@ -1,19 +1,20 @@
-<%@ page import="models.User" %>
-<%@ page import="java.util.Map" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 11.11.20
   Time: 10:33
   Navigationsleiste; wird immer angezeigt.
 --%>
+<%@ page import="models.User" %>
 
 <%
     User user = (User) session.getAttribute("user");
+    String prefix = (String) request.getAttribute("contextPath");
 %>
 
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="home">
+        <a class="navbar-brand" href="<%= prefix %>/home">
             Ausleihbibliothek
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Navigation umschalten">
@@ -23,7 +24,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-
+                <% if (user != null && "admin".equals(user.getRole())) { %>
+                    <li class="nav-item">
+                        <a href="<%= prefix %>/admin" class="nav-link text-danger">
+                            <span class="fa fa-cog mr-2" aria-hidden="true"></span>Adminbereich
+                        </a>
+                    </li>
+                <% } %>
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -31,10 +38,10 @@
                 <!-- Authentication Links -->
                 <% if (user == null) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="login">Anmelden</a>
+                        <a class="nav-link" href="<%= prefix %>/login">Anmelden</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register">Registrieren</a>
+                        <a class="nav-link" href="<%= prefix %>/register">Registrieren</a>
                     </li>
                 <% } else { %>
                     <li class="nav-item dropdown">
@@ -45,7 +52,7 @@
                             <a class="dropdown-item" data-toggle="modal" href="#editProfileModal">Profil bearbeiten</a>
                             <a class="dropdown-item" data-toggle="modal" href="#changePwdModal">Passwort ändern</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="logout">Abmelden</a>
+                            <a class="dropdown-item" href="<%= prefix %>/logout">Abmelden</a>
                         </div>
                     </li>
                 <% } %>

@@ -133,7 +133,7 @@ public abstract class Controller extends HttpServlet {
             case ANGEMELDET:
                 return user != null;
             case ADMIN:
-                return user != null && user.getRole().equals("Admin");
+                return user != null && "admin".equals(user.getRole());
             default:
                 return true;
         }

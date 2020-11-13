@@ -37,6 +37,7 @@ public class ChangePasswordController extends Controller {
             //Wenn das Passwort nicht stimmt: redirect back.
             else {
                 ((Map<String, String>)session.getAttribute("errors")).put("password_old", "Das Passwort stimmt nicht.");
+                ((Map<String, String>)session.getAttribute("errors")).put("modal", "changePwdModal");
                 session.setAttribute("keepErrors", true);
             }
             //redirect back

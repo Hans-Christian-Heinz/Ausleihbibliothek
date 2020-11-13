@@ -7,6 +7,7 @@
 --%>
 
 <%
+    String prefix = (String) request.getAttribute("contextPath");
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
 %>
@@ -15,7 +16,7 @@
     <div class="card-header">Login</div>
 
     <div class="card-body">
-        <form method="POST" action="login">
+        <form method="POST" action="<%= prefix %>/login">
             <%-- TODO csrf --%>
 
             <div class="form-group row">

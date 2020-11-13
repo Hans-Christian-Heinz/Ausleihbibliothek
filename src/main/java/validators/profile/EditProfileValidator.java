@@ -15,10 +15,12 @@ public class EditProfileValidator extends Validator {
     public boolean validate() {
         boolean valid = true;
 
+        String id = params.get("user_id")[0];
+
         valid = valid && validateRequired("username");
         valid = valid && validateRequired("name");
         valid = valid && validateRequired("vorname");
-        valid = valid && validateUnique("username", new User(), false);
+        valid = valid && validateUnique("username", new User(), id);
 
         if (! valid) {
             //Fehlermeldung wird verwendet, um das Formular (modales Fenster) unmittelbar anzuzeigen.

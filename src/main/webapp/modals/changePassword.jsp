@@ -8,6 +8,7 @@
 <%@ page import="java.util.Map" %>
 
 <%
+    String prefix = (String) request.getAttribute("contextPath");
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
 %>
 
@@ -78,7 +79,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
-                <form class="form" id="change_pwd_form" action="profile/pwd" method="POST">
+                <form class="form" id="change_pwd_form" action="<%= prefix %>/profile/pwd" method="POST">
                     <button type="submit" class="btn btn-primary">Passwort ändern</button>
                 </form>
             </div>

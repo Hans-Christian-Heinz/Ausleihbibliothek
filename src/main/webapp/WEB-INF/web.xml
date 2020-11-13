@@ -63,4 +63,14 @@
         <servlet-name>change-password-controller</servlet-name>
         <url-pattern>/profile/pwd</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>admin-std-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.StdController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>admin-std-controller</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -9,6 +9,7 @@
 <%@ page import="models.User" %>
 
 <%
+    String prefix = (String) request.getAttribute("contextPath");
     User user = (User) session.getAttribute("user");
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
@@ -25,6 +26,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
+                    <input type="hidden" name="user_id" value="<%= user.getId() %>" form="profile_form"/>
+
                     <label for="username" class="col-md-4 col-form-label text-md-right">Benutzername</label>
                     <div class="col-md-6">
                         <input class="form-control <%= errors.containsKey("username") ? "is-invalid" : "" %>"
@@ -81,7 +84,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
-                <form class="form" id="profile_form" action="profile/edit" method="POST">
+                <form class="form" id="profile_form" action="<%= prefix %>/profile/edit" method="POST">
                     <button type="submit" class="btn btn-primary">Profil speichern</button>
                 </form>
             </div>

@@ -1,0 +1,25 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: h.heinz
+  Date: 13.11.20
+  Time: 09:06
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="java.util.Map" %>
+<%@ page import="models.User" %>
+
+<%
+    User user = (User) session.getAttribute("user");
+    Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
+    Map<String, String> old = (Map<String, String>) session.getAttribute("old");
+%>
+
+<div class="card">
+    <div class="card-header">Wilkommen, <%= user.getFullName() %>.</div>
+
+    <div class="card-body">
+        <p>
+            Sie haben den Adminbereich der Applikation erreicht..
+        </p>
+    </div>
+</div>

@@ -20,7 +20,7 @@ public class RegisterValidator extends Validator {
         valid = valid && validateRequired("vorname");
         valid = valid && validateRequired("password");
         valid = valid && validateRequired("password_repeat");
-        valid = valid && validateUnique("username", new User(), true);
+        valid = valid && validateUnique("username", new User(), null);
         valid = valid && validatePwd("password");
         valid = valid && validatePwd("password_repeat");
         valid = valid && validateSame("password", "password_repeat");

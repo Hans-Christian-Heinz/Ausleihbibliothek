@@ -74,10 +74,10 @@ public abstract class Validator {
      *
      * @param key
      * @param model
-     * @param insert
+     * @param id
      * @return
      */
-    protected boolean validateUnique(String key, ARModel model, boolean insert) {
+    protected boolean validateUnique(String key, ARModel model, String id) {
         String table = model.getTable();
         String dbKey = model.getPropertyMap().get(key);
 
@@ -90,7 +90,7 @@ public abstract class Validator {
             if (res.first()) {
                 //Benutze reflection, um Setter aufzurufen
                 int count = res.getInt("anzahl");
-                if (insert) {
+                if (id == null) {
                     if (count != 0) {
                         errors.put(key, "Der eingegebene Wert für " + key + " ist in der Datenbank bereits vorhanden.");
                         return false;
@@ -99,7 +99,18 @@ public abstract class Validator {
                 else {
                     //Überprüfen, ob der Wert für ein anderes Profil vorliegt
                     if (count == 1) {
-                        //TODO
+                        String q2 = "SELECT " + dbKey + " FROM " + table + " WHERE id=" + id + ";";
+                        Statement s2 = db.createStatement();
+                        ResultSet r2 = s2.executeQuery(q2);
+                        if (r2.first()) {
+                            if (val.equals(r2.getObject(dbKey))) {
+                                return true;
+                            }
+                            else {
+                                errors.put(key, "Der eingegebene Wert für " + key + " ist in der Datenbank bereits für einen anderen Datensatz vorhanden.");
+                                return false;
+                            }
+                        }
                     }
                     if (count > 1) {
                         errors.put(key, "Der eingegebene Wert für " + key + " ist in der Datenbank bereits für einen anderen Datensatz vorhanden.");
