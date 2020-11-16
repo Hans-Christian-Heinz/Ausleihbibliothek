@@ -1,10 +1,10 @@
 package models;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import mappers.UserMapper;
 
-public class User extends ARModel {
+import java.math.BigInteger;
+
+public class User extends DBModel {
     private BigInteger id;
     private String username;
     private String name;
@@ -12,24 +12,8 @@ public class User extends ARModel {
     private String role;
     private String password;
 
-    @Override
-    public Map<String, String> getPropertyMap() {
-        Map<String, String> res = new HashMap<>();
-        res.put("id", "id");
-        res.put("username", "username");
-        res.put("vorname", "vorname");
-        res.put("name", "name");
-        res.put("role", "role");
-        res.put("password", "password");
-        return res;
-    }
-
-    @Override
-    public String getTable() {
-        return "users";
-    }
-
     public User() {
+        mapper = new UserMapper();
         id = BigInteger.valueOf(0);
     }
 

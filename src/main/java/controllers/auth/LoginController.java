@@ -2,14 +2,12 @@ package controllers.auth;
 
 import controllers.Controller;
 import help.PasswordNew;
+import mappers.UserMapper;
 import models.User;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -22,9 +20,9 @@ public class LoginController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
-        User user = new User();
-        user.getByKey("username", req.getParameter("username"), db);
+        UserMapper mapper = new UserMapper();
         try {
+            User user = (User) mapper.getByKey("username", req.getParameter("username"), db);
             if (PasswordNew.validatePassword(req.getParameter("password"), user.getPassword())) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);

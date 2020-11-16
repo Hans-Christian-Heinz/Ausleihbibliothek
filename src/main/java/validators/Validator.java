@@ -1,10 +1,11 @@
 package validators;
 
-import models.ARModel;
+import mappers.DBMapper;
+import mappers.UserMapper;
+import models.DBModel;
+import models.User;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigInteger;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,11 +19,13 @@ public abstract class Validator {
     protected Map<String, String> errors;
     protected Map<String, String[]> params;
     private Connection db;
+    private User currentUser;
 
-    public Validator(Map<String, String[]> params, Connection db) {
+    public Validator(Map<String, String[]> params, Connection db, User currentUser) {
         this.params = params;
         errors = new HashMap<>();
         this.db = db;
+        this.currentUser = currentUser;
     }
 
     public abstract boolean validate();
@@ -77,7 +80,7 @@ public abstract class Validator {
      * @param id
      * @return
      */
-    protected boolean validateUnique(String key, ARModel model, String id) {
+    protected boolean validateUnique(String key, DBModel model, String id) {
         String table = model.getTable();
         String dbKey = model.getPropertyMap().get(key);
 
@@ -137,7 +140,7 @@ public abstract class Validator {
      * @param model
      * @return
      */
-    protected boolean validateExists(String key, ARModel model) {
+    protected boolean validateExists(String key, DBModel model) {
         String table = model.getTable();
         String dbKey = model.getPropertyMap().get(key);
 
@@ -165,6 +168,48 @@ public abstract class Validator {
             errors.put(key, "Das Vorkommen des Wertes in der Datenbank konnte nicht validiert werden.");
             return false;
         }
+    }
+
+    /**
+     * Stelle sicher, dass die übergebene id die des angemeldeten Benutzers ist
+     *
+     * @param key
+     * @param mapper
+     * @return
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    protected boolean validateSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        long id = Long.parseLong(params.get(key)[0]);
+        DBModel user = mapper.getById(id, db);
+        if (! currentUser.equals(user)) {
+            errors.put(key, "Sie dürfen die ausgewählte Operation nur für Ihr eigenes Benutzerprofil durchführen.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Stelle sicher, dass die übergebene id die des angemeldeten Benutzers ist
+     *
+     * @param key
+     * @param mapper
+     * @return
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    protected boolean validateNotSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        long id = Long.parseLong(params.get(key)[0]);
+        DBModel user = mapper.getById(id, db);
+        if (currentUser.equals(user)) {
+            errors.put(key, "Sie dürfen die ausgewählte Operation nicht für Ihr eigenes Benutzerprofil durchführen.");
+            return false;
+        }
+        return true;
     }
 
     public Map<String, String> getErrors() {

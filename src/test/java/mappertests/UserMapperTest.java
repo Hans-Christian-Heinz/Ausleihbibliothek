@@ -1,6 +1,7 @@
 package mappertests;
 
-import models.ARModel;
+import mappers.UserMapper;
+import models.DBModel;
 import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ public class UserMapperTest {
     @Test
     void getById() {
         try {
-            ARModel user = mapper.getById(1, db);
+            DBModel user = mapper.getById(1, db);
             User u2 = new User();
             u2.setVorname("Max");
             u2.setName("Mustermann");
@@ -101,7 +102,7 @@ public class UserMapperTest {
     @Test
     void getByUsername() {
         try {
-            ARModel user = mapper.getByKey("username", "e.mustermann", db);
+            DBModel user = mapper.getByKey("username", "e.mustermann", db);
             User u2 = new User();
             u2.setVorname("Erika");
             u2.setName("Mustermann");
@@ -124,7 +125,7 @@ public class UserMapperTest {
 
     @Test
     void getAll() {
-        List<ARModel> liste = mapper.getAll(db);
+        List<DBModel> liste = mapper.getAll(db);
         assertEquals(2, liste.size());
 
         User u1 = new User();
@@ -141,7 +142,7 @@ public class UserMapperTest {
         u2.setRole("admin");
         u2.setId(BigInteger.valueOf(2));
 
-        for (ARModel model : liste) {
+        for (DBModel model : liste) {
             assertTrue(model instanceof User);
             if (model.getId().equals(BigInteger.valueOf(2))) {
                 assertEquals(model, u2);
@@ -162,7 +163,6 @@ public class UserMapperTest {
         user.setRole("admin");
 
         mapper.insert(db, user);
-        //assertTrue(res);
         assertEquals(mapper.getById(3, db), user);
     }
 
@@ -170,14 +170,14 @@ public class UserMapperTest {
     void update() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         User user = (User) mapper.getById(1, db);
         user.setVorname("Maximilian");
-        user.update(db);
+        mapper.update(db, user);
         assertEquals(user, mapper.getById(1, db));
     }
 
     @Test
     void delete() {
         mapper.delete(db, BigInteger.valueOf(1));
-        List<ARModel> liste = mapper.getAll(db);
+        List<DBModel> liste = mapper.getAll(db);
         assertEquals(1, liste.size());
         User u2 = new User();
         u2.setVorname("Erika");

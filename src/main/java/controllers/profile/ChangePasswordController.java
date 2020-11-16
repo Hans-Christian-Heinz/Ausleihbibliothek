@@ -2,10 +2,9 @@ package controllers.profile;
 
 import controllers.Controller;
 import help.PasswordNew;
+import mappers.UserMapper;
 import models.User;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,13 +25,14 @@ public class ChangePasswordController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        UserMapper mapper = new UserMapper();
         //first: validate the password_old (Rest der Validierung passiert in der Superklasse Controller
         HttpSession session = req.getSession();;
         User user = (User) session.getAttribute("user");
         try {
             if (PasswordNew.validatePassword(req.getParameter("password_old"), user.getPassword())) {
                 user.setPassword(PasswordNew.generateStorngPasswordHash(req.getParameter("password")));
-                user.update(db);
+                mapper.update(db, user);
             }
             //Wenn das Passwort nicht stimmt: redirect back.
             else {

@@ -1,11 +1,15 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import mappers.UserMapper;
+import models.DBModel;
+import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class UserListController extends Controller {
     public UserListController() {
@@ -17,6 +21,9 @@ public class UserListController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //TODO: get users;  pagination
+        UserMapper mapper = new UserMapper();
+        List<DBModel> users = mapper.getAll(db);
+        req.setAttribute("users", users);
 
         super.doGet(req, resp);
     }

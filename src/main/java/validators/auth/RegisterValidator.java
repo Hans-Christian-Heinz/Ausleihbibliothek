@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 public class RegisterValidator extends Validator {
-    public RegisterValidator(Map<String, String[]> params, Connection db) {
-        super(params, db);
+    public RegisterValidator(Map<String, String[]> params, Connection db, User currentUser) {
+        super(params, db, currentUser);
     }
 
     @Override

@@ -87,10 +87,10 @@ public abstract class Controller extends HttpServlet {
             Validator validator;
             try {
                 Constructor<Validator> constr = (Constructor<Validator>) Class.forName(validatorname).getDeclaredConstructors()[0];
-                validator = constr.newInstance(req.getParameterMap(), db);
+                validator = constr.newInstance(req.getParameterMap(), db, (User) session.getAttribute("user"));
             }
             catch (Exception e) {
-                validator = new FalseValidator(req.getParameterMap(), db);
+                validator = new FalseValidator(req.getParameterMap(), db, (User) session.getAttribute("user"));
             }
 
             req.setAttribute("tpl", this.tpl);
