@@ -22,7 +22,7 @@ public class DeleteUserController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
+        long id = Long.parseLong(req.getParameter("id"));
         UserMapper mapper = new UserMapper();
         mapper.delete(db, BigInteger.valueOf(id));
 

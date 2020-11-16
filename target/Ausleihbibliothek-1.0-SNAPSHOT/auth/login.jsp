@@ -28,7 +28,7 @@
                     <%
                         if(errors.containsKey("username")) {
                     %>
-                    <span class="invalid-feedback" role="alert">
+                        <span class="invalid-feedback" role="alert">
                             <strong><%= errors.get("username") %></strong>
                         </span>
                     <%

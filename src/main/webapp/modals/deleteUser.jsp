@@ -29,7 +29,7 @@
 
                 <form class="form" action="<%= prefix %>/admin/users/delete" method="POST">
                     <input type="hidden" name="id" value="<%= request.getParameter("uid") %>"/>
-                    <button type="submit" class="btn btn-secondary">Benutzerprofil löschen</button>
+                    <button type="submit" class="btn btn-danger">Benutzerprofil löschen</button>
                 </form>
             </div>
         </div>

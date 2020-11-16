@@ -24,7 +24,7 @@
         <h3>Alle Bücher</h3>
     </div>
     <div class="card-body">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover text-center">
             <tr>
                 <th><label for="name">Name</label></th>
                 <th><label for="author">Autor</label></th>
@@ -37,7 +37,9 @@
                     <td><%= book.getName() %></td>
                     <td><%= book.getAuthor() %></td>
                     <td>TODO rel</td>
-                    <td>TODO del</td>
+                    <td>
+                        <a href="#deleteBookModal<%= model.getId() %>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Löschen</a>
+                    </td>
                 </tr>
             <% } %>
 
@@ -78,3 +80,10 @@
         </table>
     </div>
 </div>
+
+<% for (DBModel model : books) { %>
+<jsp:include page="/modals/deleteBook.jsp">
+    <jsp:param name="bid" value="<%= model.getId() %>"/>
+    <jsp:param name="name" value="<%= ((Book)model).getName() %>"/>
+</jsp:include>
+<% } %>

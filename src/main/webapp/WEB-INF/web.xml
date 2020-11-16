@@ -114,4 +114,14 @@
         <servlet-name>admin-book-controller</servlet-name>
         <url-pattern>/admin/books</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>delete-book-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.books.DeleteBookController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-book-controller</servlet-name>
+        <url-pattern>/admin/books/delete</url-pattern>
+    </servlet-mapping>
 </web-app>
