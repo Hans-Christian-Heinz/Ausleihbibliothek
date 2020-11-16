@@ -38,9 +38,12 @@ public abstract class DBMapper {
     protected abstract String stdTable();
 
     /**
-     * liefert eine Map, die den Attributen eines ARModel-Objekts die zugehörigen DB-Spalten zuordnet
+     * Ordne den Feldern eines Objekts Spalten der zugehörigen Datenbanktabelle zu
+     * Schlüssel: Feldname des Objekts, Wert: Spaltenname der Tabelle
+     *
      * @return
      */
+
     protected abstract Map<String, String> stdPropertyMap();
 
     public Class<? extends DBModel> getModelClass() {
@@ -184,13 +187,16 @@ public abstract class DBMapper {
                 Method getter =
                         modelClass.getDeclaredMethod("get" + key.substring(0, 1).toUpperCase() + key.substring(1));
                 Object value = getter.invoke(model);
+                query.append(propertyMap.get(key));
                 if (value != null) {
-                    query.append(propertyMap.get(key));
                     values.append("'").append(value.toString()).append("'");
-                    if (keyIt.hasNext()) {
-                        query.append(",");
-                        values.append(", ");
-                    }
+                }
+                else {
+                    values.append("NULL");
+                }
+                if (keyIt.hasNext()) {
+                    query.append(",");
+                    values.append(", ");
                 }
             }
         }
@@ -212,7 +218,7 @@ public abstract class DBMapper {
         } catch(SQLException e) {
             stmt.execute(query.toString());
             //Suche die maximale id; (RETURN_GENERATED_KEYS für sqlite (TestDB) nicht implementiert
-            String q = "SELECT MAX(id) as m FROM users;";
+            String q = "SELECT MAX(id) as m FROM " + table + ";";
             Statement s = db.createStatement();
             ResultSet r = s.executeQuery(q);
             if (r.next()) {

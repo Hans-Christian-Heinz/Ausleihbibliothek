@@ -41,7 +41,7 @@
         <div class="collapse navbar-collapse" id="secondNavbar">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a href="#" class="nav-link pl-0">Bücherliste</a>
+                    <a href="<%= prefix %>/admin/books" class="nav-link pl-0">Bücherliste</a>
                 </li>
                 <li class="nav-item">
                     <a href="<%= prefix %>/admin/users" class="nav-link">Benutzer verwalten</a>

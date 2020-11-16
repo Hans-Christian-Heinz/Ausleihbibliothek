@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Enumeration;
 
 public class DeleteUserController extends Controller {
     public DeleteUserController() {
