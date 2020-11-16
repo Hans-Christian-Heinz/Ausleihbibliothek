@@ -32,7 +32,7 @@
             </tr>
             <% for (DBModel model : users) { %>
                 <% User u = (User) model; %>
-                <tr>
+                <tr id="tableRowUsers<%= u.getId() %>">
                     <td><%= u.getUsername() %></td>
                     <td><%= u.getFullName() %></td>
                     <td>
@@ -51,7 +51,7 @@
                     </td>
                     <td>
                         <% if (! user.equals(u)) { %>
-                            <a href="#" class="btn btn-small btn-outline-danger">Löschen</a>
+                            <a href="#deleteUserModal<%= u.getId() %>" data-toggle="modal" class="btn btn-small btn-outline-danger">Löschen</a>
                         <% } %>
                     </td>
                 </tr>
@@ -59,3 +59,10 @@
         </table>
     </div>
 </div>
+
+<% for (DBModel model : users) { %>
+<jsp:include page="/modals/deleteUser.jsp">
+    <jsp:param name="fullName" value="<%= ((User)model).getFullName() %>"/>
+    <jsp:param name="uid" value="<%= model.getId() %>"/>
+</jsp:include>
+<% } %>

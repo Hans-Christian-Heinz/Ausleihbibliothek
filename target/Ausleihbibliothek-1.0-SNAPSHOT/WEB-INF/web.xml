@@ -12,6 +12,7 @@
     <servlet-mapping>
         <servlet-name>home-controller</servlet-name>
         <url-pattern>/home</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>register-controller</servlet-name>
@@ -82,5 +83,25 @@
     <servlet-mapping>
         <servlet-name>admin-user-controller</servlet-name>
         <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>change-role-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.users.ChangeRoleController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>change-role-controller</servlet-name>
+        <url-pattern>/admin/users/changeRole</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>delete-user-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.users.DeleteUserController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-user-controller</servlet-name>
+        <url-pattern>/admin/users/delete</url-pattern>
     </servlet-mapping>
 </web-app>
