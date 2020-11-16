@@ -41,6 +41,10 @@ public class User extends ARModel {
         this.id = id;
     }
 
+    public void setId(Integer id) {
+        setId(BigInteger.valueOf(id.longValue()));
+    }
+
     public String getUsername() {
         return username;
     }
@@ -95,5 +99,48 @@ public class User extends ARModel {
                 ", role='" + role + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        //return super.equals(obj);
+        if (obj instanceof User) {
+            User u2 = (User) obj;
+            boolean eq = true;
+            if (name == null) {
+                eq = eq && u2.name == null;
+            }
+            else {
+                eq = eq && this.getName().equals(u2.getName());
+            }
+            if (vorname == null) {
+                eq = eq && u2.vorname == null;
+            }
+            else {
+                eq = eq && vorname.equals(u2.vorname);
+            }
+            if (username == null) {
+                eq = eq && u2.username == null;
+            }
+            else {
+                eq = eq && this.username.equals(u2.username);
+            }
+            if (password == null) {
+                eq = eq && u2.password == null;
+            }
+            else {
+                eq = eq && this.password.equals(u2.password);
+            }
+            if (role == null) {
+                eq = eq && u2.role == null;
+            }
+            else {
+                eq = eq && this.role.equals(u2.role);
+            }
+            return eq;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -22,6 +22,11 @@ public class Book extends ARModel {
     }
 
     @Override
+    public void setId(Integer id) {
+        this.id = BigInteger.valueOf(id.longValue());
+    }
+
+    @Override
     public BigInteger getId() {
         return id;
     }

@@ -34,6 +34,7 @@ public abstract class ARModel implements Serializable {
 
     public abstract void setId(BigInteger id);
     public abstract BigInteger getId();
+    public abstract void setId(Integer id);
 
     public void getByKey(String index, String val, Connection db) {
         Class<? extends ARModel> klasse = this.getClass();
