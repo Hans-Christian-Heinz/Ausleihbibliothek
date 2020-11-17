@@ -130,6 +130,50 @@ public abstract class DBMapper {
     }
 
     /**
+     * returns a collection of (up to) perPage models to be displayed on the current page
+     *
+     * @param perPage number of models per page
+     * @param currentPage starts with 0
+     * @return list of items to be displayed
+     */
+    public List<DBModel> getPagination(int perPage, int currentPage) {
+        if (perPage < 0 || currentPage < 0) {
+            return getAll();
+        }
+
+        StringBuilder query = getSelectHelp();
+        query.append(" LIMIT ").append(perPage).append(" OFFSET ").append(perPage * currentPage).append(";");
+
+        return executeSelect(query.toString());
+    }
+
+    /**
+     * Gebe die Anzahl an Datensätzen aus.
+     *
+     * @return
+     */
+    public int count() {
+        String query = "SELECT COUNT(id) AS anzahl FROM " + table + ";";
+
+        try {
+            Statement stmt = db.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            //First, da bei id-Suche nur eine Zeile ausgelesen wird
+            //Eigentlich lieber res.first(), das funktioniert aber mit sqlite nicht. (Test-DB)
+            if (res.next()) {
+                return res.getInt("anzahl");
+            }
+            else {
+                return 0;
+            }
+        } catch(SQLException e) {
+            //TODO
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
      * Gebe eine Liste aller Datensätze aus, wobei ein Index vorgeschreiben wird
      *
      * @param index
@@ -137,8 +181,6 @@ public abstract class DBMapper {
      * @return
      */
     public List<DBModel> getAllWhereIndex(String index, String val) {
-        List<DBModel> erg = new ArrayList<>();
-        Set<String> keySet = propertyMap.keySet();
         StringBuilder query = this.getSelectHelp();
         if (index != null) {
             query.append(" WHERE " + propertyMap.get(index) + "=");
@@ -151,39 +193,7 @@ public abstract class DBMapper {
         }
         query.append(";");
 
-        try {
-            Statement stmt = db.createStatement();
-            ResultSet res = stmt.executeQuery(query.toString());
-            //First, da bei id-Suche nur eine Zeile ausgelesen wird
-            while (res.next()) {
-                DBModel model = modelClass.getConstructor().newInstance();
-                for (String key : keySet) {
-                    //Benutze reflection, um Setter aufzurufen
-                    //Field feld = modelClass.getDeclaredField(key);
-                    Object value = res.getObject(propertyMap.get(key));
-                    if (value != null) {
-                        //Method setter =
-                        //      modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), feld.getType());
-                        Method setter =
-                                modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), value.getClass());
-                        setter.invoke(model, value);
-                    }
-                }
-
-                erg.add(model);
-            }
-        } catch(SQLException | NoSuchMethodException e) {
-            //TODO
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return erg;
+        return executeSelect(query.toString());
     }
 
     /**
@@ -317,5 +327,44 @@ public abstract class DBMapper {
         query.append(" FROM ").append(table);
 
         return query;
+    }
+
+    private List<DBModel> executeSelect(String query) {
+        List<DBModel> erg = new ArrayList<>();
+        Set<String> keySet = propertyMap.keySet();
+
+        try {
+            Statement stmt = db.createStatement();
+            ResultSet res = stmt.executeQuery(query.toString());
+            //First, da bei id-Suche nur eine Zeile ausgelesen wird
+            while (res.next()) {
+                DBModel model = modelClass.getConstructor().newInstance();
+                for (String key : keySet) {
+                    //Benutze reflection, um Setter aufzurufen
+                    //Field feld = modelClass.getDeclaredField(key);
+                    Object value = res.getObject(propertyMap.get(key));
+                    if (value != null) {
+                        //Method setter =
+                        //      modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), feld.getType());
+                        Method setter =
+                                modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), value.getClass());
+                        setter.invoke(model, value);
+                    }
+                }
+
+                erg.add(model);
+            }
+        } catch(SQLException | NoSuchMethodException e) {
+            //TODO
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return erg;
     }
 }

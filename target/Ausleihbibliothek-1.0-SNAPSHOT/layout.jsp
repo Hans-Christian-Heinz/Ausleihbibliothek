@@ -1,5 +1,6 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="models.User" %>
+<%@ page import="help.UserHelp" %>
 <%--
   Created by IntelliJ IDEA.
   User: h.heinz
@@ -12,7 +13,7 @@
 
 <%
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
-    User user = (User) session.getAttribute("user");
+    User user = UserHelp.getUser(session);
     String uri = (String) session.getAttribute("uri");
     String prefix = (String) request.getAttribute("contextPath");
 %>

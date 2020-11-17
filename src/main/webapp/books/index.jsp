@@ -27,12 +27,12 @@
         <h3>Alle Bücher</h3>
     </div>
     <div class="card-body">
-        <table class="table table-bordered table-hover text-center">
+        <table class="table table-bordered  table-striped table-hover text-center">
             <tr>
-                <th>Name</th>
-                <th>Autor</th>
-                <th>Ausgeliehen von</th>
-                <th></th>
+                <th style="width: 30%">Name</th>
+                <th style="width: 30%">Autor</th>
+                <th style="width: 30%">Ausgeliehen von</th>
+                <th style="width: 10%"></th>
             </tr>
             <% for (DBModel model : books) { %>
             <% Book book = (Book) model; %>
@@ -56,3 +56,7 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/pagination.jsp">
+    <jsp:param name="href" value="/books"/>
+</jsp:include>

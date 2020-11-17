@@ -24,12 +24,12 @@
         <h3>Alle Bücher</h3>
     </div>
     <div class="card-body">
-        <table class="table table-bordered table-hover text-center">
+        <table class="table table-bordered table-striped table-hover text-center">
             <tr>
-                <th><label for="name">Name</label></th>
-                <th><label for="author">Autor</label></th>
-                <th>Ausgeliehen von</th>
-                <th>Löschen</th>
+                <th style="width: 30%"><label for="name">Name</label></th>
+                <th style="width: 30%"><label for="author">Autor</label></th>
+                <th style="width: 30%">Ausgeliehen von</th>
+                <th style="width: 10%">Löschen</th>
             </tr>
             <% for (DBModel model : books) { %>
                 <% Book book = (Book) model; %>

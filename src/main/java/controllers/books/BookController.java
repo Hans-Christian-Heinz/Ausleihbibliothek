@@ -21,7 +21,31 @@ public class BookController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBMapper mapper = MappersHelper.bookMapper;
-        List<DBModel> books = mapper.getAll();
+
+        int perPage;
+        int currentPage;
+        if (req.getParameter("perPage") == null) {
+            perPage = 2;
+        }
+         else {
+            perPage = Integer.parseInt(req.getParameter("perPage"));
+        }
+        if (req.getParameter("currentPage") == null) {
+            currentPage = 1;
+        }
+        else {
+            currentPage = Integer.parseInt(req.getParameter("currentPage")) - 1;
+        }
+        int count = mapper.count();
+        int totalPages = count/perPage;
+        if (count%perPage > 0) {
+            totalPages++;
+        }
+
+        req.setAttribute("totalPages", totalPages);
+
+        //List<DBModel> books = mapper.getAll();
+        List<DBModel> books = mapper.getPagination(perPage, currentPage);
         req.setAttribute("books", books);
 
         super.doGet(req, resp);

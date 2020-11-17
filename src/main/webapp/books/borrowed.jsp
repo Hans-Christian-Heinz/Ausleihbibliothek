@@ -23,11 +23,11 @@
         <h3>Von Ihnen ausgeliehene Bücher</h3>
     </div>
     <div class="card-body">
-        <table class="table table-bordered table-hover text-center">
+        <table class="table table-bordered table-hover table-striped text-center">
             <tr>
-                <th>Name</th>
-                <th>Autor</th>
-                <th></th>
+                <th style="width: 45%">Name</th>
+                <th style="width: 45%">Autor</th>
+                <th style="width: 10%"></th>
             </tr>
             <% for (DBModel model : books) { %>
             <% Book book = (Book) model; %>
