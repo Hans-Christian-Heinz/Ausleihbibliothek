@@ -11,6 +11,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="models.Book" %>
 
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%
     String prefix = (String) request.getAttribute("contextPath");
     User user = (User) session.getAttribute("user");
@@ -18,8 +20,6 @@
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
     List<DBModel> books = (List<DBModel>) request.getAttribute("books");
 %>
-
-<h1><%= request.getAttribute("size") %></h1>
 
 <div class="card">
     <div class="card-header">

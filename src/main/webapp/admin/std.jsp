@@ -7,6 +7,7 @@
 --%>
 <%@ page import="java.util.Map" %>
 <%@ page import="models.User" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     User user = (User) session.getAttribute("user");

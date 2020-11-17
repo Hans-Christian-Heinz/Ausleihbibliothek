@@ -1,10 +1,12 @@
-<%@ page import="java.util.Map" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 11.11.20
   Time: 10:50
   Formular zum Anmelden
 --%>
+<%@ page import="java.util.Map" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     String prefix = (String) request.getAttribute("contextPath");

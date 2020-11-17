@@ -9,6 +9,7 @@
 <%@ page import="models.User" %>
 <%@ page import="models.DBModel" %>
 <%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     String prefix = (String) request.getAttribute("contextPath");

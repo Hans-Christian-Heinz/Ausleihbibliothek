@@ -1,4 +1,3 @@
-<%@ page import="java.util.Map" %>
 <%--
   Created by IntelliJ IDEA.
   User: h.heinz
@@ -6,6 +5,8 @@
   Time: 10:51
   Formular zum Abmelden
 --%>
+<%@ page import="java.util.Map" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     String prefix = (String) request.getAttribute("contextPath");
