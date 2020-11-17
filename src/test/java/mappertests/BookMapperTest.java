@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import helpers.HelpTesting;
 import mappers.BookMapper;
 import models.Book;
 import models.DBModel;
@@ -28,48 +29,8 @@ public class BookMapperTest {
     }
 
     @BeforeEach
-    void createTable() {
-        String query = "DROP TABLE IF EXISTS books;";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        query = "CREATE TABLE books (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name VARCHAR NOT NULL," +
-                "author VARCHAR NOT NULL," +
-                "ausgeliehen_von INTEGER," +
-                "FOREIGN KEY(ausgeliehen_von) REFERENCES users(id) ON DELETE CASCADE" +
-                ");";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        query = "INSERT INTO books (name, author, ausgeliehen_von) VALUES(" +
-                "'Dune'," +
-                "'Frank Herbert'," +
-                "NULL" +
-                "),(" +
-                "'Rote Ernte'," +
-                "'Eric Ambler'," +
-                "2" +
-                "),(" +
-                "'Die Libelle'," +
-                "'John le Carre'," +
-                "2" +
-                ");";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    void createTables() {
+        HelpTesting.createTables();
     }
 
     @Test
@@ -125,6 +86,25 @@ public class BookMapperTest {
                 assertEquals(model, b3);
             }
         }
+    }
+
+    @Test
+    void getAllWhereIndex() {
+        Book b2 = new Book();
+        b2.setName("Rote Ernte");
+        b2.setAuthor("Eric Ambler");
+        b2.setAusgeliehenVon(BigInteger.valueOf(2));
+        b2.setId(BigInteger.valueOf(2));
+        Book b3 = new Book();
+        b3.setName("Die Libelle");
+        b3.setAuthor("John le Carre");
+        b3.setAusgeliehenVon(BigInteger.valueOf(2));
+        b3.setId(BigInteger.valueOf(3));
+
+        List<DBModel> liste = mapper.getAllWhereIndex("ausgeliehenVon", "2");
+        assertEquals(2, liste.size());
+        assertEquals(b2, liste.get(0));
+        assertEquals(b3, liste.get(1));
     }
 
     @Test

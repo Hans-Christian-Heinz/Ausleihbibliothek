@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import helpers.HelpTesting;
 import mappers.UserMapper;
 import models.DBModel;
 import models.User;
@@ -26,49 +27,8 @@ public class UserMapperTest {
     }
 
     @BeforeEach
-    void createTable() {
-        String query = "DROP TABLE IF EXISTS users;";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        query = "CREATE TABLE users (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name VARCHAR NOT NULL," +
-                "vorname VARCHAR NOT NULL," +
-                "username VARCHAR NOT NULL," +
-                "password VARCHAR NOT NULL," +
-                "role VARCHAR" +
-                ");";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        query = "INSERT INTO users (name, vorname, username, password, role) VALUES(" +
-                "'Mustermann'," +
-                "'Max'," +
-                "'m.mustermann'," +
-                "'pwd'," +
-                "NULL" +
-                "),(" +
-                "'Mustermann'," +
-                "'Erika'," +
-                "'e.mustermann'," +
-                "'pwd'," +
-                "'admin'" +
-                ");";
-        try {
-            Statement stmt = db.createStatement();
-            stmt.execute(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    void createTables() {
+        HelpTesting.createTables();
     }
 
     @Test
@@ -146,6 +106,21 @@ public class UserMapperTest {
                 assertEquals(model, u1);
             }
         }
+    }
+
+    @Test
+    void getAllWhereIndex() {
+        User u2 = new User();
+        u2.setVorname("Erika");
+        u2.setName("Mustermann");
+        u2.setUsername("e.mustermann");
+        u2.setPassword("pwd");
+        u2.setRole("admin");
+        u2.setId(BigInteger.valueOf(2));
+
+        List<DBModel> liste = mapper.getAllWhereIndex("username", "e.mustermann");
+        assertEquals(1, liste.size());
+        assertEquals(u2, liste.get(0));
     }
 
     @Test

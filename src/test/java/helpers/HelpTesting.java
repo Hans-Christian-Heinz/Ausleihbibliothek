@@ -1,35 +1,15 @@
-package trlationshiptests;
+package helpers;
 
 import db.DatabaseHelper;
-import mappers.BookMapper;
-import mappers.DBMapper;
-import mappers.UserMapper;
-import models.Book;
-import models.User;
-import models.relationships.BelongsTo;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+public class HelpTesting {
+    public static void createTables() {
+        Connection db = DatabaseHelper.getConnection();
 
-public class BelongsToTest {
-    private Connection db;
-
-    public BelongsToTest() {
-        //String dbPath = "../resources/db_test.sqlite";
-        String dbPath = "/home/h.heinz/IdeaProjects/Ausleihbibliothek/src/test/resources/db_test.sqlite";
-        db = DatabaseHelper.getConnection();
-    }
-
-    @BeforeEach
-    void createTables() {
         String query = "DROP TABLE IF EXISTS users;";
         try {
             Statement stmt = db.createStatement();
@@ -113,20 +93,5 @@ public class BelongsToTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
-
-    @Test
-    void queryRelationshipTest() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DBMapper mapper = Book.getMapper();
-        DBMapper userMapper = User.getMapper();
-
-        Book b1 = (Book) mapper.getById(1);
-        BelongsTo rel1 = new BelongsTo("owner", b1, User.class, "ausgeliehenVon");
-        assertNull(rel1.queryRelationship());
-
-        Book b2 = (Book) mapper.getById(2);
-        BelongsTo rel2 = new BelongsTo("owner", b2, User.class, "ausgeliehenVon");
-        User u2 = (User) userMapper.getById(2);
-        assertEquals(u2, rel2.queryRelationship());
     }
 }

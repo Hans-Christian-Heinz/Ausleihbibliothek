@@ -126,9 +126,29 @@ public abstract class DBMapper {
      * @return
      */
     public List<DBModel> getAll() {
+        return getAllWhereIndex(null, null);
+    }
+
+    /**
+     * Gebe eine Liste aller Datensätze aus, wobei ein Index vorgeschreiben wird
+     *
+     * @param index
+     * @param val
+     * @return
+     */
+    public List<DBModel> getAllWhereIndex(String index, String val) {
         List<DBModel> erg = new ArrayList<>();
         Set<String> keySet = propertyMap.keySet();
         StringBuilder query = this.getSelectHelp();
+        if (index != null) {
+            query.append(" WHERE " + propertyMap.get(index) + "=");
+            if (val == null) {
+                query.append("NULL");
+            }
+            else {
+                query.append("'").append(val).append("'");
+            }
+        }
         query.append(";");
 
         try {

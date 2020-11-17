@@ -2,17 +2,14 @@ package models.relationships;
 
 import models.DBModel;
 
-import java.sql.Connection;
-
 public abstract class Relationship {
-    protected DBModel owner;
+    protected Class<? extends DBModel> ownerClass;
     protected Class<? extends DBModel> otherClass;
     protected String ownFk;
     protected String otherFk;
     protected String name;
-    protected Connection db;
 
-    public abstract Object queryRelationship();
+    public abstract Object queryRelationship(DBModel owner);
 
     public String getName() {
         return name;
@@ -22,12 +19,12 @@ public abstract class Relationship {
         this.name = name;
     }
 
-    public DBModel getOwner() {
-        return owner;
+    public Class<? extends DBModel> getOwnerClass() {
+        return ownerClass;
     }
 
-    public void setOwner(DBModel owner) {
-        this.owner = owner;
+    public void setOwner(Class<? extends DBModel> ownerClass) {
+        this.ownerClass = ownerClass;
     }
 
     public Class<? extends DBModel> getOtherClass() {
