@@ -31,7 +31,7 @@ public class RegisterController extends Controller {
 
             mapper.insert(user);
 
-            req.getSession().setAttribute("user", user);
+            req.getSession().setAttribute("user_id", user.getId());
             resp.sendRedirect("home");
         } catch (Exception e) {
             e.printStackTrace();

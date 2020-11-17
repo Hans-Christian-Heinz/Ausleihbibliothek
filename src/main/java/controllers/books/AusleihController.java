@@ -2,6 +2,7 @@ package controllers.books;
 
 import controllers.Controller;
 import help.MappersHelper;
+import help.UserHelp;
 import mappers.BookMapper;
 import mappers.DBMapper;
 import mappers.UserMapper;
@@ -32,7 +33,7 @@ public class AusleihController extends Controller {
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DBMapper mapper = MappersHelper.bookMapper;
         try {
-            User user = (User) req.getSession().getAttribute("user");
+            User user = UserHelp.getUser(req.getSession());
             Book book = (Book) mapper.getById(Long.parseLong(req.getParameter("id")));
 
             if (book.getAusgeliehenVon() == null) {

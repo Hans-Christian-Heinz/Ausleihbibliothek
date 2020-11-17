@@ -85,6 +85,16 @@
         <url-pattern>/books/borrow</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>borrowed-controller</servlet-name>
+        <servlet-class>
+            controllers.books.BorrowedController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>borrowed-controller</servlet-name>
+        <url-pattern>/books/borrowed</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>admin-std-controller</servlet-name>
         <servlet-class>
             controllers.admin.StdController

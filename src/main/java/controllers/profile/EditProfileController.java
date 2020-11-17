@@ -2,6 +2,7 @@ package controllers.profile;
 
 import controllers.Controller;
 import help.MappersHelper;
+import help.UserHelp;
 import mappers.UserMapper;
 import models.User;
 
@@ -27,7 +28,7 @@ public class EditProfileController extends Controller {
         UserMapper mapper = MappersHelper.userMapper;
 
         try {
-            User user = (User) req.getSession().getAttribute("user");
+            User user = UserHelp.getUser(req.getSession());
             user.setName(req.getParameter("name"));
             user.setUsername(req.getParameter("username"));
             user.setVorname(req.getParameter("vorname"));

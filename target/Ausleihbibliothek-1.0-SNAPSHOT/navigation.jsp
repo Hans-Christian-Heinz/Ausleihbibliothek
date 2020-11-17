@@ -6,10 +6,11 @@
   Navigationsleiste; wird immer angezeigt.
 --%>
 <%@ page import="models.User" %>
+<%@ page import="help.UserHelp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User user = (User) session.getAttribute("user");
+    User user = UserHelp.getUser(session);
     String prefix = (String) request.getAttribute("contextPath");
 %>
 
@@ -45,8 +46,14 @@
                         <a class="nav-link" href="<%= prefix %>/register">Registrieren</a>
                     </li>
                 <% } else { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<%= prefix %>/books">Bücher</a>
+                    <li class="nav-item dropdown">
+                        <a id="booksDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Bücher
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="booksDropdown">
+                            <a class="dropdown-item" href="<%= prefix %>/books">Alle Bücher</a>
+                            <a class="dropdown-item" href="<%= prefix %>/books/borrowed">Von Ihnen ausgeliehen</a>
+                        </div>
                     </li>
 
                     <li class="nav-item dropdown">

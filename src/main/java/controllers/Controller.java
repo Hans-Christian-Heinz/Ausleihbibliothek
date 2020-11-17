@@ -2,6 +2,7 @@ package controllers;
 
 import java.lang.reflect.*;
 import db.DatabaseHelper;
+import help.UserHelp;
 import models.User;
 import validators.FalseValidator;
 import validators.Validator;
@@ -41,9 +42,11 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
+
         //get the contextPath of the servlet
         req.setAttribute("contextPath", req.getContextPath());
-        HttpSession session = req.getSession();
         session.setAttribute("uri", req.getRequestURI());
 
         if (istBerechtigt(session)) {
@@ -69,6 +72,8 @@ public abstract class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
+
         String redirect = (String) session.getAttribute("uri");
         if (redirect == null) {
             redirect = req.getRequestURI();
@@ -86,10 +91,10 @@ public abstract class Controller extends HttpServlet {
             Validator validator;
             try {
                 Constructor<Validator> constr = (Constructor<Validator>) Class.forName(validatorname).getDeclaredConstructors()[0];
-                validator = constr.newInstance(req.getParameterMap(), (User) session.getAttribute("user"));
+                validator = constr.newInstance(req.getParameterMap(), UserHelp.getUser(session));
             }
             catch (Exception e) {
-                validator = new FalseValidator(req.getParameterMap(), (User) session.getAttribute("user"));
+                validator = new FalseValidator(req.getParameterMap(), UserHelp.getUser(session));
             }
 
             req.setAttribute("tpl", this.tpl);
@@ -125,7 +130,7 @@ public abstract class Controller extends HttpServlet {
     protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 
     private boolean istBerechtigt(HttpSession session) {
-        User user = (User)session.getAttribute("user");
+        User user = UserHelp.getUser(session);
         switch (berechtigung) {
             case GAST:
                 return user == null;

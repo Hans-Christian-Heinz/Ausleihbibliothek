@@ -10,12 +10,13 @@
 <%@ page import="models.DBModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="models.Book" %>
+<%@ page import="help.UserHelp" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     String prefix = (String) request.getAttribute("contextPath");
-    User user = (User) session.getAttribute("user");
+    User user = UserHelp.getUser(session);
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
     List<DBModel> books = (List<DBModel>) request.getAttribute("books");

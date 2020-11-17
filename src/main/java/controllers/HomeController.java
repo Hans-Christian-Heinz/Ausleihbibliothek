@@ -1,8 +1,11 @@
 package controllers;
 
+import help.UserHelp;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -15,7 +18,9 @@ public class HomeController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getSession().getAttribute("user") != null) {
+        HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
+        if (UserHelp.getUser(session) != null) {
             tpl = "welcome.jsp";
         }
         else {
@@ -25,12 +30,7 @@ public class HomeController extends Controller {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
-
-    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        //do nothing
     }
 }

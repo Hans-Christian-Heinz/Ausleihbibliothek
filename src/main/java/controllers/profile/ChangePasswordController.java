@@ -3,6 +3,7 @@ package controllers.profile;
 import controllers.Controller;
 import help.MappersHelper;
 import help.PasswordNew;
+import help.UserHelp;
 import mappers.UserMapper;
 import models.User;
 
@@ -29,7 +30,7 @@ public class ChangePasswordController extends Controller {
         UserMapper mapper = MappersHelper.userMapper;
         //first: validate the password_old (Rest der Validierung passiert in der Superklasse Controller
         HttpSession session = req.getSession();;
-        User user = (User) session.getAttribute("user");
+        User user = UserHelp.getUser(session);
         try {
             if (PasswordNew.validatePassword(req.getParameter("password_old"), user.getPassword())) {
                 user.setPassword(PasswordNew.generateStorngPasswordHash(req.getParameter("password")));

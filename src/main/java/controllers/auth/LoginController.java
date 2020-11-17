@@ -26,7 +26,7 @@ public class LoginController extends Controller {
             User user = (User) mapper.getByKey("username", req.getParameter("username"));
             if (PasswordNew.validatePassword(req.getParameter("password"), user.getPassword())) {
                 HttpSession session = req.getSession();
-                session.setAttribute("user", user);
+                session.setAttribute("user_id", user.getId());
 
                 resp.sendRedirect("home");
             }

@@ -14,7 +14,6 @@
 
 <%
     String prefix = (String) request.getAttribute("contextPath");
-    User user = (User) session.getAttribute("user");
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
     List<DBModel> books = (List<DBModel>) request.getAttribute("books");

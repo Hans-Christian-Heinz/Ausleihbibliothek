@@ -7,10 +7,11 @@
 --%>
 <%@ page import="java.util.Map" %>
 <%@ page import="models.User" %>
+<%@ page import="help.UserHelp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User user = (User) session.getAttribute("user");
+    User user = UserHelp.getUser(session);
     Map<String, String> errors = (Map<String, String>) session.getAttribute("errors");
     Map<String, String> old = (Map<String, String>) session.getAttribute("old");
 %>
