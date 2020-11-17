@@ -19,6 +19,8 @@
     List<DBModel> books = (List<DBModel>) request.getAttribute("books");
 %>
 
+<h1><%= request.getAttribute("size") %></h1>
+
 <div class="card">
     <div class="card-header">
         <h3>Alle Bücher</h3>
@@ -50,12 +52,6 @@
                     </td>
                 </tr>
             <% } %>
-            <tr class="text-danger small">
-                <% for (String key : errors.keySet()) { %>
-                    <td><%= key %></td>
-                    <td><%= errors.get(key) %></td>
-                <% } %>
-            </tr>
         </table>
     </div>
 </div>

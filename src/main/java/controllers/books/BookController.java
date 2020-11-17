@@ -22,6 +22,7 @@ public class BookController extends Controller {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBMapper mapper = MappersHelper.bookMapper;
         List<DBModel> books = mapper.getAll();
+        req.setAttribute("size", books.size());
         req.setAttribute("books", books);
 
         super.doGet(req, resp);

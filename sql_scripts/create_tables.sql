@@ -1,0 +1,19 @@
+use bibliothek;
+
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    vorname VARCHAR(255) NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    role ENUM('admin'),
+    password VARCHAR(255) NOT NULL
+);
+CREATE TABLE books (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    author VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    ausgeliehen_von BIGINT UNSIGNED,
+    FOREIGN KEY(ausgeliehen_von) REFERENCES users(id) ON DELETE SET NULL
+);
