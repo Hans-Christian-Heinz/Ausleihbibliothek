@@ -9,8 +9,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 public class ChangeRoleValidator extends Validator {
-    public ChangeRoleValidator(Map<String, String[]> params, Connection db, User currentUser) {
-        super(params, db, currentUser);
+    public ChangeRoleValidator(Map<String, String[]> params, User currentUser) {
+        super(params, currentUser);
     }
 
     @Override

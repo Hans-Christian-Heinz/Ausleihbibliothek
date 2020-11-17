@@ -31,7 +31,7 @@ public class EditProfileController extends Controller {
             user.setUsername(req.getParameter("username"));
             user.setVorname(req.getParameter("vorname"));
 
-            mapper.update(db, user);
+            mapper.update(user);
 
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));

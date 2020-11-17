@@ -7,7 +7,11 @@ import java.math.BigInteger;
 import java.util.Map;
 
 public abstract class DBModel implements Serializable {
-    protected DBMapper mapper;
+    protected static DBMapper mapper;
+
+    public static DBMapper getMapper() {
+        return mapper;
+    }
 
     public abstract void setId(BigInteger id);
     public abstract BigInteger getId();

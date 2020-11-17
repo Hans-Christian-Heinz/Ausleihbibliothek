@@ -25,7 +25,7 @@ public class DeleteBookController extends Controller {
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DBMapper mapper = new BookMapper();
         long id = Long.parseLong(req.getParameter("id"));
-        mapper.delete(db, BigInteger.valueOf(id));
+        mapper.delete(BigInteger.valueOf(id));
 
         //redirect back
         resp.sendRedirect((String) req.getAttribute("redirect"));

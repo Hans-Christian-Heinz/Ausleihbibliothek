@@ -32,7 +32,7 @@ public class AusleihController extends Controller {
         DBMapper mapper = new BookMapper();
         try {
             User user = (User) req.getSession().getAttribute("user");
-            Book book = (Book) mapper.getById(Long.parseLong(req.getParameter("id")), db);
+            Book book = (Book) mapper.getById(Long.parseLong(req.getParameter("id")));
 
             if (book.getAusgeliehenVon() == null) {
                 book.setAusgeliehenVon(user.getId());
@@ -41,7 +41,7 @@ public class AusleihController extends Controller {
                 book.setAusgeliehenVon((BigInteger) null);
             }
 
-            mapper.update(db, book);
+            mapper.update(book);
 
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));

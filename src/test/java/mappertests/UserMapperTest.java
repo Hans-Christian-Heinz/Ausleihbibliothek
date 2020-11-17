@@ -1,5 +1,6 @@
 package mappertests;
 
+import db.DatabaseHelper;
 import mappers.UserMapper;
 import models.DBModel;
 import models.User;
@@ -16,18 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserMapperTest {
     private final UserMapper mapper;
-    private Connection db;
+    private final Connection db;
 
     public UserMapperTest() {
         mapper = new UserMapper();
         //String dbPath = "../resources/db_test.sqlite";
-        String dbPath = "/home/h.heinz/IdeaProjects/Ausleihbibliothek/src/test/resources/db_test.sqlite";
-        try {
-            Class.forName("org.sqlite.JDBC");
-            db = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+        db = DatabaseHelper.getConnection();
     }
 
     @BeforeEach
@@ -79,7 +74,7 @@ public class UserMapperTest {
     @Test
     void getById() {
         try {
-            DBModel user = mapper.getById(1, db);
+            DBModel user = mapper.getById(1);
             User u2 = new User();
             u2.setVorname("Max");
             u2.setName("Mustermann");
@@ -102,7 +97,7 @@ public class UserMapperTest {
     @Test
     void getByUsername() {
         try {
-            DBModel user = mapper.getByKey("username", "e.mustermann", db);
+            DBModel user = mapper.getByKey("username", "e.mustermann");
             User u2 = new User();
             u2.setVorname("Erika");
             u2.setName("Mustermann");
@@ -125,7 +120,7 @@ public class UserMapperTest {
 
     @Test
     void getAll() {
-        List<DBModel> liste = mapper.getAll(db);
+        List<DBModel> liste = mapper.getAll();
         assertEquals(2, liste.size());
 
         User u1 = new User();
@@ -162,22 +157,22 @@ public class UserMapperTest {
         user.setVorname("Abc");
         user.setRole("admin");
 
-        mapper.insert(db, user);
-        assertEquals(mapper.getById(3, db), user);
+        mapper.insert(user);
+        assertEquals(mapper.getById(3), user);
     }
 
     @Test
     void update() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-        User user = (User) mapper.getById(1, db);
+        User user = (User) mapper.getById(1);
         user.setVorname("Maximilian");
-        mapper.update(db, user);
-        assertEquals(user, mapper.getById(1, db));
+        mapper.update(user);
+        assertEquals(user, mapper.getById(1));
     }
 
     @Test
     void delete() {
-        mapper.delete(db, BigInteger.valueOf(1));
-        List<DBModel> liste = mapper.getAll(db);
+        mapper.delete(BigInteger.valueOf(1));
+        List<DBModel> liste = mapper.getAll();
         assertEquals(1, liste.size());
         User u2 = new User();
         u2.setVorname("Erika");

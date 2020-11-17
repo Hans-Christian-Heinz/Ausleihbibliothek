@@ -22,7 +22,7 @@ public class LoginController extends Controller {
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         UserMapper mapper = new UserMapper();
         try {
-            User user = (User) mapper.getByKey("username", req.getParameter("username"), db);
+            User user = (User) mapper.getByKey("username", req.getParameter("username"));
             if (PasswordNew.validatePassword(req.getParameter("password"), user.getPassword())) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);

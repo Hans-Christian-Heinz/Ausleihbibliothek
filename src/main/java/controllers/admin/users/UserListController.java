@@ -22,7 +22,7 @@ public class UserListController extends Controller {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //TODO: get users;  pagination
         UserMapper mapper = new UserMapper();
-        List<DBModel> users = mapper.getAll(db);
+        List<DBModel> users = mapper.getAll();
         req.setAttribute("users", users);
 
         super.doGet(req, resp);

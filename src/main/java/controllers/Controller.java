@@ -22,7 +22,7 @@ import java.util.Map;
 
 public abstract class Controller extends HttpServlet {
     protected String tpl;
-    protected Connection db;
+    protected final Connection db;
     protected Zugang berechtigung;
 
     protected enum Zugang {
@@ -33,9 +33,8 @@ public abstract class Controller extends HttpServlet {
     };
 
     public Controller() {
-        try {
-            this.db = DatabaseHelper.getConnection();
-        } catch(ClassNotFoundException | SQLException e) {
+        db = DatabaseHelper.getConnection();
+         if (db == null) {
             this.tpl = "errors/dbAccess.jsp";
         }
     }
@@ -87,10 +86,10 @@ public abstract class Controller extends HttpServlet {
             Validator validator;
             try {
                 Constructor<Validator> constr = (Constructor<Validator>) Class.forName(validatorname).getDeclaredConstructors()[0];
-                validator = constr.newInstance(req.getParameterMap(), db, (User) session.getAttribute("user"));
+                validator = constr.newInstance(req.getParameterMap(), (User) session.getAttribute("user"));
             }
             catch (Exception e) {
-                validator = new FalseValidator(req.getParameterMap(), db, (User) session.getAttribute("user"));
+                validator = new FalseValidator(req.getParameterMap(), (User) session.getAttribute("user"));
             }
 
             req.setAttribute("tpl", this.tpl);

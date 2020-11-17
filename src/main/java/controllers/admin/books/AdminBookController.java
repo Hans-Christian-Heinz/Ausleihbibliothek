@@ -23,7 +23,7 @@ public class AdminBookController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBMapper mapper = new BookMapper();
-        List<DBModel> books = mapper.getAll(db);
+        List<DBModel> books = mapper.getAll();
         req.setAttribute("books", books);
 
         super.doGet(req, resp);
@@ -37,7 +37,7 @@ public class AdminBookController extends Controller {
         book.setName(req.getParameter("name"));
 
         try {
-            mapper.insert(db, book);
+            mapper.insert(book);
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {

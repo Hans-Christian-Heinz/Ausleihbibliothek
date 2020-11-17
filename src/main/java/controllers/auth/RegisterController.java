@@ -28,7 +28,7 @@ public class RegisterController extends Controller {
             //user.setPassword(Password.getSaltedHash(req.getParameter("password")));
             user.setPassword(PasswordNew.generateStorngPasswordHash(req.getParameter("password")));
 
-            mapper.insert(db, user);
+            mapper.insert(user);
 
             req.getSession().setAttribute("user", user);
             resp.sendRedirect("home");

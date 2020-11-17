@@ -1,6 +1,7 @@
 package models;
 
 import mappers.BookMapper;
+import mappers.DBMapper;
 
 import java.math.BigInteger;
 
@@ -10,8 +11,13 @@ public class Book extends DBModel {
     private String author;
     private BigInteger ausgeliehenVon;
 
+    protected static DBMapper mapper = new BookMapper();
+
+    public static DBMapper getMapper() {
+        return mapper;
+    }
+
     public Book() {
-        mapper = new BookMapper();
         id = BigInteger.valueOf(0);
     }
 

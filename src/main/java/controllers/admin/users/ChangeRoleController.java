@@ -25,7 +25,7 @@ public class ChangeRoleController extends Controller {
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserMapper mapper = new UserMapper();
         try {
-            User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")), db);
+            User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")));
             if (user.getRole() == null) {
                 user.setRole("admin");
             }
@@ -33,7 +33,7 @@ public class ChangeRoleController extends Controller {
                 user.setRole(null);
             }
 
-            mapper.update(db, user);
+            mapper.update(user);
 
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));

@@ -1,5 +1,6 @@
 package validators;
 
+import db.DatabaseHelper;
 import mappers.DBMapper;
 import mappers.UserMapper;
 import models.DBModel;
@@ -18,13 +19,13 @@ import java.util.regex.Pattern;
 public abstract class Validator {
     protected Map<String, String> errors;
     protected Map<String, String[]> params;
-    private Connection db;
+    private final Connection db;
     private User currentUser;
 
-    public Validator(Map<String, String[]> params, Connection db, User currentUser) {
+    public Validator(Map<String, String[]> params, User currentUser) {
         this.params = params;
         errors = new HashMap<>();
-        this.db = db;
+        this.db = DatabaseHelper.getConnection();
         this.currentUser = currentUser;
     }
 
@@ -200,7 +201,7 @@ public abstract class Validator {
      */
     protected boolean validateSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         long id = Long.parseLong(params.get(key)[0]);
-        DBModel user = mapper.getById(id, db);
+        DBModel user = mapper.getById(id);
         if (! currentUser.equals(user)) {
             errors.put(key, "Sie dürfen die ausgewählte Operation nur für Ihr eigenes Benutzerprofil durchführen.");
             return false;
@@ -221,7 +222,7 @@ public abstract class Validator {
      */
     protected boolean validateNotSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         long id = Long.parseLong(params.get(key)[0]);
-        DBModel user = mapper.getById(id, db);
+        DBModel user = mapper.getById(id);
         if (currentUser.equals(user)) {
             errors.put(key, "Sie dürfen die ausgewählte Operation nicht für Ihr eigenes Benutzerprofil durchführen.");
             return false;

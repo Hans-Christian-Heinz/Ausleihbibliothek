@@ -1,5 +1,6 @@
 package models;
 
+import mappers.DBMapper;
 import mappers.UserMapper;
 
 import java.math.BigInteger;
@@ -12,8 +13,13 @@ public class User extends DBModel {
     private String role;
     private String password;
 
+    protected static DBMapper mapper = new UserMapper();
+
+    public static DBMapper getMapper() {
+        return mapper;
+    }
+
     public User() {
-        mapper = new UserMapper();
         id = BigInteger.valueOf(0);
     }
 

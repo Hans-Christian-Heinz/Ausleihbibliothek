@@ -1,5 +1,6 @@
 package mappertests;
 
+import db.DatabaseHelper;
 import mappers.BookMapper;
 import models.Book;
 import models.DBModel;
@@ -19,18 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookMapperTest {
     private final BookMapper mapper;
-    private Connection db;
+    private final Connection db;
 
     public BookMapperTest() {
         mapper = new BookMapper();
-        //String dbPath = "../resources/db_test.sqlite";
-        String dbPath = "/home/h.heinz/IdeaProjects/Ausleihbibliothek/src/test/resources/db_test.sqlite";
-        try {
-            Class.forName("org.sqlite.JDBC");
-            db = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+        db = DatabaseHelper.getConnection();
     }
 
     @BeforeEach
@@ -81,7 +75,7 @@ public class BookMapperTest {
     @Test
     void getById() {
         try {
-            DBModel book = mapper.getById(1, db);
+            DBModel book = mapper.getById(1);
             Book b2 = new Book();
             b2.setName("Dune");
             b2.setAuthor("Frank Herbert");
@@ -101,7 +95,7 @@ public class BookMapperTest {
 
     @Test
     void getAll() {
-        List<DBModel> liste = mapper.getAll(db);
+        List<DBModel> liste = mapper.getAll();
         assertEquals(3, liste.size());
 
         Book b1 = new Book();
@@ -139,22 +133,22 @@ public class BookMapperTest {
         book.setAuthor("Robert Harris");
         book.setName("Das Schweigen der Lämmer");
 
-        mapper.insert(db, book);
-        assertEquals(mapper.getById(4, db), book);
+        mapper.insert(book);
+        assertEquals(mapper.getById(4), book);
     }
 
     @Test
     void update() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-        Book book = (Book) mapper.getById(2, db);
+        Book book = (Book) mapper.getById(2);
         book.setAuthor("Dashiell Hammit");
-        mapper.update(db, book);
-        assertEquals(book, mapper.getById(2, db));
+        mapper.update(book);
+        assertEquals(book, mapper.getById(2));
     }
 
     @Test
     void delete() {
-        mapper.delete(db, BigInteger.valueOf(1));
-        List<DBModel> liste = mapper.getAll(db);
+        mapper.delete(BigInteger.valueOf(1));
+        List<DBModel> liste = mapper.getAll();
         assertEquals(2, liste.size());
         Book b2 = new Book();
         b2.setAuthor("Eric Ambler");

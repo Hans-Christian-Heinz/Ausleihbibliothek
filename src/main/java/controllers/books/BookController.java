@@ -20,7 +20,7 @@ public class BookController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBMapper mapper = new BookMapper();
-        List<DBModel> books = mapper.getAll(db);
+        List<DBModel> books = mapper.getAll();
         req.setAttribute("books", books);
 
         super.doGet(req, resp);

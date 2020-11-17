@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AusleihValidator extends Validator {
-    public AusleihValidator(Map<String, String[]> params, Connection db, User currentUser) {
-        super(params, db, currentUser);
+    public AusleihValidator(Map<String, String[]> params, User currentUser) {
+        super(params, currentUser);
     }
 
     @Override

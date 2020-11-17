@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 public class LoginValidator extends Validator {
-    public LoginValidator(Map<String, String[]> params, Connection db, User currentUser) {
-        super(params, db, currentUser);
+    public LoginValidator(Map<String, String[]> params, User currentUser) {
+        super(params, currentUser);
     }
 
     @Override

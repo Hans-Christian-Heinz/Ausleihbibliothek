@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 public class AdminBookValidator extends Validator {
-    public AdminBookValidator(Map<String, String[]> params, Connection db, User currentUser) {
-        super(params, db, currentUser);
+    public AdminBookValidator(Map<String, String[]> params, User currentUser) {
+        super(params, currentUser);
     }
 
     @Override

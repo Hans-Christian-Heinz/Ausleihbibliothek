@@ -1,5 +1,6 @@
 package mappers;
 
+import db.DatabaseHelper;
 import models.DBModel;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +16,7 @@ public abstract class DBMapper {
     private Class<? extends DBModel> modelClass;
     private String table;
     private Map<String, String> propertyMap;
+    private final Connection db;
 
     /**
      * Konstruktor; ruft abstrakte Methoden auf
@@ -23,6 +25,7 @@ public abstract class DBMapper {
         modelClass = stdClass();
         table = stdTable();
         propertyMap = stdPropertyMap();
+        db = DatabaseHelper.getConnection();
     }
 
     /**
@@ -63,14 +66,13 @@ public abstract class DBMapper {
      *
      * @param index
      * @param val
-     * @param db
      * @return
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      * @throws InstantiationException
      */
-    public DBModel getByKey(String index, String val, Connection db) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public DBModel getByKey(String index, String val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         DBModel model = modelClass.getConstructor().newInstance();
 
         Set<String> keySet = propertyMap.keySet();
@@ -113,19 +115,17 @@ public abstract class DBMapper {
      * Methode überschreibt das aktuelle Objekt mit den aus Daten aus der Datenbank
      *
      * @param id
-     * @param db
      */
-    public DBModel getById(long id, Connection db) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return this.getByKey("id", String.valueOf(id), db);
+    public DBModel getById(long id) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return this.getByKey("id", String.valueOf(id));
     }
 
     /**
      * Gebe eine Liste aller Datensätze aus; todo pagination
      *
-     * @param db
      * @return
      */
-    public List<DBModel> getAll(Connection db) {
+    public List<DBModel> getAll() {
         List<DBModel> erg = new ArrayList<>();
         Set<String> keySet = propertyMap.keySet();
         StringBuilder query = this.getSelectHelp();
@@ -169,9 +169,9 @@ public abstract class DBMapper {
     /**
      * Füge eine neue Zeile in die Datenbank ein
      *
-     * @param db
+     * @param model
      */
-    public void insert(Connection db, DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, SQLException {
+    public void insert(DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, SQLException {
         if (! modelClass.isInstance(model)) {
             //TODO exception
         }
@@ -230,9 +230,9 @@ public abstract class DBMapper {
     /**
      * Aktualisiere eine vorhandene Zeile in der Datenbank
      *
-     * @param db
+     * @param model
      */
-    public void update(Connection db, DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void update(DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Set<String> keySet = propertyMap.keySet();
 
         //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
@@ -268,11 +268,10 @@ public abstract class DBMapper {
     /**
      * Entferne das Modell aus der Datenbank
      *
-     * @param db
      * @param id
      * @return
      */
-    public void delete(Connection db, BigInteger id) {
+    public void delete(BigInteger id) {
         String query = "DELETE FROM " + table + " WHERE id=" + id + ";";
         try {
             Statement stmt = db.createStatement();

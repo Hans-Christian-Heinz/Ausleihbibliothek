@@ -32,7 +32,7 @@ public class ChangePasswordController extends Controller {
         try {
             if (PasswordNew.validatePassword(req.getParameter("password_old"), user.getPassword())) {
                 user.setPassword(PasswordNew.generateStorngPasswordHash(req.getParameter("password")));
-                mapper.update(db, user);
+                mapper.update(user);
             }
             //Wenn das Passwort nicht stimmt: redirect back.
             else {
