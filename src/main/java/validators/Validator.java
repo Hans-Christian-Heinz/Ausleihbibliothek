@@ -73,6 +73,23 @@ public abstract class Validator {
     }
 
     /**
+     * Stelle siche, dass der Wert für key mit dem übergebenen Objekt übereinstimmt.
+     * @param key
+     * @param val
+     * @return
+     */
+    protected boolean validateEqual(String key, String val) {
+        String v = params.get(key)[0];
+        if (v.equals(val)) {
+            return true;
+        }
+        else {
+            errors.put(key, "Der Wert für " + key + " muss " + val + " sein.");
+            return false;
+        }
+    }
+
+    /**
      * Überprüfe, ob der Wert für key in der Datenbank bereits vorliegt
      *
      * @param key

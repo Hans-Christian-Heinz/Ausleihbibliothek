@@ -65,6 +65,26 @@
         <url-pattern>/profile/pwd</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>book-controller</servlet-name>
+        <servlet-class>
+            controllers.books.BookController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>book-controller</servlet-name>
+        <url-pattern>/books</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ausleih-controller</servlet-name>
+        <servlet-class>
+            controllers.books.AusleihController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ausleih-controller</servlet-name>
+        <url-pattern>/books/borrow</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>admin-std-controller</servlet-name>
         <servlet-class>
             controllers.admin.StdController
@@ -113,5 +133,15 @@
     <servlet-mapping>
         <servlet-name>admin-book-controller</servlet-name>
         <url-pattern>/admin/books</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>delete-book-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.books.DeleteBookController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-book-controller</servlet-name>
+        <url-pattern>/admin/books/delete</url-pattern>
     </servlet-mapping>
 </web-app>
