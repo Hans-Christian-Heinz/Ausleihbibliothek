@@ -1,7 +1,7 @@
 package validators;
 
 import db.DatabaseHelper;
-import mappers.DBMapper;
+import help.MappersHelper;
 import mappers.UserMapper;
 import models.DBModel;
 import models.User;
@@ -199,7 +199,8 @@ public abstract class Validator {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    protected boolean validateSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    protected boolean validateSelf(String key) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        UserMapper mapper = MappersHelper.userMapper;
         long id = Long.parseLong(params.get(key)[0]);
         DBModel user = mapper.getById(id);
         if (! currentUser.equals(user)) {
@@ -220,7 +221,8 @@ public abstract class Validator {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    protected boolean validateNotSelf(String key, UserMapper mapper) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    protected boolean validateNotSelf(String key) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        UserMapper mapper = MappersHelper.userMapper;
         long id = Long.parseLong(params.get(key)[0]);
         DBModel user = mapper.getById(id);
         if (currentUser.equals(user)) {

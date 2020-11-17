@@ -1,6 +1,7 @@
 package controllers.auth;
 
 import controllers.Controller;
+import help.MappersHelper;
 import help.PasswordNew;
 import mappers.UserMapper;
 import models.User;
@@ -18,7 +19,7 @@ public class RegisterController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         //Validierung geschieht schon in der Elternklasse
         try {
             User user = new User();

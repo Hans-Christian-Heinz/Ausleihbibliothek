@@ -7,17 +7,9 @@ public abstract class Relationship {
     protected Class<? extends DBModel> otherClass;
     protected String ownFk;
     protected String otherFk;
-    protected String name;
 
     public abstract Object queryRelationship(DBModel owner);
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    //public abstract String getSqlJoin();
 
     public Class<? extends DBModel> getOwnerClass() {
         return ownerClass;

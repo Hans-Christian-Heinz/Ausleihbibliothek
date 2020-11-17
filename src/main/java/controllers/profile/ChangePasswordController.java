@@ -1,6 +1,7 @@
 package controllers.profile;
 
 import controllers.Controller;
+import help.MappersHelper;
 import help.PasswordNew;
 import mappers.UserMapper;
 import models.User;
@@ -25,7 +26,7 @@ public class ChangePasswordController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         //first: validate the password_old (Rest der Validierung passiert in der Superklasse Controller
         HttpSession session = req.getSession();;
         User user = (User) session.getAttribute("user");

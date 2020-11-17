@@ -3,7 +3,6 @@ package validators.auth;
 import models.User;
 import validators.Validator;
 
-import java.sql.Connection;
 import java.util.Map;
 
 public class LoginValidator extends Validator {

@@ -1,6 +1,7 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import help.MappersHelper;
 import mappers.UserMapper;
 import models.DBModel;
 import models.User;
@@ -21,7 +22,7 @@ public class UserListController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //TODO: get users;  pagination
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         List<DBModel> users = mapper.getAll();
         req.setAttribute("users", users);
 

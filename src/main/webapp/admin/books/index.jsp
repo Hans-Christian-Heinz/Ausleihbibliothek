@@ -36,7 +36,7 @@
                 <tr>
                     <td><%= book.getName() %></td>
                     <td><%= book.getAuthor() %></td>
-                    <td>TODO rel</td>
+                    <td><%= book.getRelValue("owner") == null ? "-" : ((User)book.getRelValue("owner")).getFullName() %></td>
                     <td>
                         <a href="#deleteBookModal<%= model.getId() %>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Löschen</a>
                     </td>

@@ -3,7 +3,6 @@ package validators.admin.books;
 import models.User;
 import validators.Validator;
 
-import java.sql.Connection;
 import java.util.Map;
 
 public class AdminBookValidator extends Validator {

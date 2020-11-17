@@ -1,12 +1,10 @@
 package validators.books;
 
-import mappers.UserMapper;
 import models.Book;
 import models.User;
 import validators.Validator;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ public class AusleihValidator extends Validator {
 
         valid = valid && validateExists("id", new Book());
         try {
-            valid = valid && (validateEqual("user_id", "0") || validateSelf("user_id", new UserMapper()));
+            valid = valid && (validateEqual("user_id", "0") || validateSelf("user_id"));
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

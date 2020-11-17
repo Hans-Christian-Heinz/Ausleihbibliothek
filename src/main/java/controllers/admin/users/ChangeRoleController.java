@@ -1,6 +1,7 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import help.MappersHelper;
 import mappers.UserMapper;
 import models.User;
 
@@ -23,7 +24,7 @@ public class ChangeRoleController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         try {
             User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")));
             if (user.getRole() == null) {

@@ -1,6 +1,7 @@
 package controllers.auth;
 
 import controllers.Controller;
+import help.MappersHelper;
 import help.PasswordNew;
 import mappers.UserMapper;
 import models.User;
@@ -20,7 +21,7 @@ public class LoginController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         try {
             User user = (User) mapper.getByKey("username", req.getParameter("username"));
             if (PasswordNew.validatePassword(req.getParameter("password"), user.getPassword())) {

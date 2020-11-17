@@ -1,5 +1,6 @@
 package relationshiptests;
 
+import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.UserMapper;
 import models.Book;
@@ -24,13 +25,15 @@ public class HasManyTest {
 
     @Test
     void queryRelationshipTest() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Relationship rel = new HasMany("books", User.class, Book.class, "ausgeliehenVon");
-        UserMapper mapper = new UserMapper();
+        Relationship rel = new HasMany(User.class, Book.class, "ausgeliehenVon");
+        UserMapper mapper = MappersHelper.userMapper;
         DBModel u1 = mapper.getById(1);
         DBModel u2 = mapper.getById(2);
 
         List<DBModel> l1 = (List<DBModel>) rel.queryRelationship(u1);
         List<DBModel> l2 = (List<DBModel>) rel.queryRelationship(u2);
+        List<DBModel> la = (List<DBModel>) u1.getRelValue("books");
+        List<DBModel> lb = (List<DBModel>) u2.getRelValue("books");
         Book b2 = new Book();
         b2.setName("Rote Ernte");
         b2.setAuthor("Eric Ambler");
@@ -46,5 +49,9 @@ public class HasManyTest {
         assertEquals(2, l2.size());
         assertEquals(b2, l2.get(0));
         assertEquals(b3, l2.get(1));
+        assertEquals(0, la.size());
+        assertEquals(2, lb.size());
+        assertEquals(b2, lb.get(0));
+        assertEquals(b3, lb.get(1));
     }
 }

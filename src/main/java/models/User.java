@@ -1,9 +1,12 @@
 package models;
 
+import help.MappersHelper;
 import mappers.DBMapper;
-import mappers.UserMapper;
+import models.relationships.HasMany;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User extends DBModel {
     private BigInteger id;
@@ -13,14 +16,27 @@ public class User extends DBModel {
     private String role;
     private String password;
 
-    protected static DBMapper mapper = new UserMapper();
-
-    public static DBMapper getMapper() {
-        return mapper;
-    }
-
     public User() {
         id = BigInteger.valueOf(0);
+        relationships = Map.of(
+                "books", new HasMany(User.class, Book.class, "ausgeliehenVon")
+        );
+        relValues = new HashMap<>();
+        relValues.put("books", "");
+    }
+
+    public static DBMapper getMapper() {
+        return MappersHelper.userMapper;
+    }
+
+    @Override
+    public String getTable() {
+        return MappersHelper.userMapper.getTable();
+    }
+
+    @Override
+    public Map<String, String> getPropertyMap() {
+        return MappersHelper.userMapper.getPropertyMap();
     }
 
     public BigInteger getId() {

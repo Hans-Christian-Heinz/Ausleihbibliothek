@@ -1,6 +1,6 @@
 package relationshiptests;
 
-import db.DatabaseHelper;
+import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.DBMapper;
 import models.Book;
@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BelongsToTest{
     @BeforeEach
@@ -22,16 +21,17 @@ public class BelongsToTest{
 
     @Test
     void queryRelationshipTest() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DBMapper mapper = Book.getMapper();
-        DBMapper userMapper = User.getMapper();
+        DBMapper mapper = MappersHelper.bookMapper;
+        DBMapper userMapper = MappersHelper.userMapper;
 
         Book b1 = (Book) mapper.getById(1);
-        BelongsTo rel1 = new BelongsTo("owner", Book.class, User.class, "ausgeliehenVon");
-        assertNull(rel1.queryRelationship(b1));
+        BelongsTo rel = new BelongsTo(Book.class, User.class, "ausgeliehenVon");
+        assertNull(rel.queryRelationship(b1));
+        assertNull(b1.getRelValue("owner"));
 
         Book b2 = (Book) mapper.getById(2);
-        BelongsTo rel2 = new BelongsTo("owner", Book.class, User.class, "ausgeliehenVon");
         User u2 = (User) userMapper.getById(2);
-        assertEquals(u2, rel2.queryRelationship(b2));
+        assertEquals(u2, rel.queryRelationship(b2));
+        assertEquals(u2, b2.getRelValue("owner"));
     }
 }

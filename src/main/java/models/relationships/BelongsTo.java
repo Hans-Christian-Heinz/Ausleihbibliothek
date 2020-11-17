@@ -8,8 +8,7 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 
 public class BelongsTo extends Relationship {
-    public BelongsTo(String name, Class<? extends DBModel> ownerClass, Class<? extends DBModel> otherClass, String ownFk) {
-        this.name = name;
+    public BelongsTo(Class<? extends DBModel> ownerClass, Class<? extends DBModel> otherClass, String ownFk) {
         this.ownerClass = ownerClass;
         this.otherClass = otherClass;
         this.ownFk = ownFk;
@@ -40,4 +39,22 @@ public class BelongsTo extends Relationship {
 
         return null;
     }
+
+    /*@Override
+    public String getSqlJoin() {
+        try {
+            Method getMapper = ownerClass.getDeclaredMethod("getMapper");
+            DBMapper mapper = (DBMapper) getMapper.invoke(ownerClass);
+            Method getOtherMapper = otherClass.getDeclaredMethod("getMapper");
+            DBMapper otherMapper = (DBMapper) getOtherMapper.invoke(otherClass);
+            StringBuilder join = new StringBuilder(" LEFT JOIN ");
+            join.append(otherMapper.getTable()).append(" ON ").append(mapper.getTable()).append(".").append(ownFk);
+            join.append("=").append(otherMapper.getTable()).append(".id");
+
+            return join.toString();
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            //todo
+            return "";
+        }
+    }*/
 }

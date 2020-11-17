@@ -1,9 +1,12 @@
 package models;
 
-import mappers.BookMapper;
+import help.MappersHelper;
 import mappers.DBMapper;
+import models.relationships.BelongsTo;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Book extends DBModel {
     private BigInteger id;
@@ -11,14 +14,27 @@ public class Book extends DBModel {
     private String author;
     private BigInteger ausgeliehenVon;
 
-    protected static DBMapper mapper = new BookMapper();
-
-    public static DBMapper getMapper() {
-        return mapper;
-    }
-
     public Book() {
         id = BigInteger.valueOf(0);
+        relationships = Map.of(
+                "owner", new BelongsTo(Book.class, User.class, "ausgeliehenVon")
+        );
+        relValues = new HashMap<>();
+        relValues.put("owner", "");
+    }
+
+    public static DBMapper getMapper() {
+        return MappersHelper.bookMapper;
+    }
+
+    @Override
+    public String getTable() {
+        return MappersHelper.bookMapper.getTable();
+    }
+
+    @Override
+    public Map<String, String> getPropertyMap() {
+        return MappersHelper.bookMapper.getPropertyMap();
     }
 
     @Override

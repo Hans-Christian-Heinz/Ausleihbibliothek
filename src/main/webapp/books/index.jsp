@@ -36,7 +36,7 @@
                 <tr>
                     <td><%= book.getName() %></td>
                     <td><%= book.getAuthor() %></td>
-                    <td>TODO rel</td>
+                    <td><%= book.getRelValue("owner") == null ? "-" : ((User)book.getRelValue("owner")).getFullName() %></td>
                     <td>
                         <form method="post" action="<%= prefix %>/books/borrow">
                             <input type="hidden" name="id" value="<%= book.getId() %>"/>

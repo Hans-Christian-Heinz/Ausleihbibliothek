@@ -2,7 +2,6 @@ package validators;
 
 import models.User;
 
-import java.sql.Connection;
 import java.util.Map;
 
 /**

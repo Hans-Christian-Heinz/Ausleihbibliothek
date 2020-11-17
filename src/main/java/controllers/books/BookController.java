@@ -1,6 +1,7 @@
 package controllers.books;
 
 import controllers.Controller;
+import help.MappersHelper;
 import mappers.BookMapper;
 import mappers.DBMapper;
 import models.DBModel;
@@ -19,7 +20,7 @@ public class BookController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DBMapper mapper = new BookMapper();
+        DBMapper mapper = MappersHelper.bookMapper;
         List<DBModel> books = mapper.getAll();
         req.setAttribute("books", books);
 

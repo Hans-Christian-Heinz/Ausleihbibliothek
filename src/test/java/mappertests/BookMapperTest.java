@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.BookMapper;
 import models.Book;
@@ -11,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +23,7 @@ public class BookMapperTest {
     private final Connection db;
 
     public BookMapperTest() {
-        mapper = new BookMapper();
+        mapper = MappersHelper.bookMapper;
         db = DatabaseHelper.getConnection();
     }
 

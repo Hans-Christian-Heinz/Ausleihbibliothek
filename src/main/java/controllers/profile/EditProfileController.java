@@ -1,6 +1,7 @@
 package controllers.profile;
 
 import controllers.Controller;
+import help.MappersHelper;
 import mappers.UserMapper;
 import models.User;
 
@@ -23,7 +24,7 @@ public class EditProfileController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
 
         try {
             User user = (User) req.getSession().getAttribute("user");

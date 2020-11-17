@@ -1,6 +1,7 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import help.MappersHelper;
 import mappers.UserMapper;
 
 import javax.servlet.ServletException;
@@ -23,7 +24,7 @@ public class DeleteUserController extends Controller {
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         long id = Long.parseLong(req.getParameter("id"));
-        UserMapper mapper = new UserMapper();
+        UserMapper mapper = MappersHelper.userMapper;
         mapper.delete(BigInteger.valueOf(id));
 
         //redirect back

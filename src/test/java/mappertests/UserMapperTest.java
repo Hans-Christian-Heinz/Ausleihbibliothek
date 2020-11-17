@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.UserMapper;
 import models.DBModel;
@@ -18,12 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserMapperTest {
     private final UserMapper mapper;
-    private final Connection db;
 
     public UserMapperTest() {
-        mapper = new UserMapper();
-        //String dbPath = "../resources/db_test.sqlite";
-        db = DatabaseHelper.getConnection();
+        mapper = MappersHelper.userMapper;
     }
 
     @BeforeEach

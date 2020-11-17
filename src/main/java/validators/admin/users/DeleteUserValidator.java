@@ -1,11 +1,9 @@
 package validators.admin.users;
 
-import mappers.UserMapper;
 import models.User;
 import validators.Validator;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 import java.util.Map;
 
 public class DeleteUserValidator extends Validator {
@@ -19,7 +17,7 @@ public class DeleteUserValidator extends Validator {
 
         valid = valid && this.validateExists("id", new User());
         try {
-            valid = valid && this.validateNotSelf("id", new UserMapper());
+            valid = valid && this.validateNotSelf("id");
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
