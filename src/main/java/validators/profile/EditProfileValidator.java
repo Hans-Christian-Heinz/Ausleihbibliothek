@@ -17,8 +17,11 @@ public class EditProfileValidator extends Validator {
         String id = params.get("user_id")[0];
 
         valid = valid && validateRequired("username");
+        valid = valid && validateRegex("username", "(?U)[\\p{L}\\p{M}\\s'-_.]+");
         valid = valid && validateRequired("name");
+        valid = valid && validateRegex("name", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("vorname");
+        valid = valid && validateRegex("vorname", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateUnique("username", new User(), id);
 
         if (! valid) {

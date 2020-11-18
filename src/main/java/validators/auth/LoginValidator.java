@@ -15,7 +15,9 @@ public class LoginValidator extends Validator {
         boolean valid = true;
 
         valid = valid && validateRequired("username");
+        valid = valid && validateRegex("username", "(?U)[\\p{L}\\p{M}\\s'-_.]+");
         valid = valid && validateRequired("password");
+        valid = valid && validatePwd("password");
         valid = valid && validateExists("username", new User());
 
         return valid;

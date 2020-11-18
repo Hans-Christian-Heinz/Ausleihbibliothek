@@ -15,8 +15,11 @@ public class RegisterValidator extends Validator {
         boolean valid = true;
 
         valid = valid && validateRequired("username");
+        valid = valid && validateRegex("username", "(?U)[\\p{L}\\p{M}\\s'-_.]+");
         valid = valid && validateRequired("name");
+        valid = valid && validateRegex("name", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("vorname");
+        valid = valid && validateRegex("vorname", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("password");
         valid = valid && validateRequired("password_repeat");
         valid = valid && validateUnique("username", new User(), null);

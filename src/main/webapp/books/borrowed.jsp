@@ -11,6 +11,7 @@
 <%@ page import="models.Book" %>
 <%@ page import="help.UserHelp" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -33,8 +34,8 @@
             <% for (DBModel model : books) { %>
             <% Book book = (Book) model; %>
             <tr>
-                <td><%= book.getName() %></td>
-                <td><%= book.getAuthor() %></td>
+                <td><%= Encode.forHtml(book.getName()) %></td>
+                <td><%= Encode.forHtml(book.getAuthor()) %></td>
                 <td>
                     <form method="post" action="<%= prefix %>/books/borrow">
                         <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>

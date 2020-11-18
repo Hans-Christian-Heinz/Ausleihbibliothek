@@ -15,7 +15,9 @@ public class AdminBookValidator extends Validator {
         boolean valid = true;
 
         valid = valid && validateRequired("author");
+        valid = valid && validateRegex("author", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("name");
+        valid = valid && validateRegex("author", "(?U)[\\p{L}\\p{M}\\s'-]+");
 
         return valid;
     }

@@ -8,6 +8,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="models.User" %>
 <%@ page import="help.UserHelp" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -17,7 +18,7 @@
 %>
 
 <div class="card">
-    <div class="card-header">Wilkommen, <%= user.getFullName() %>.</div>
+    <div class="card-header">Wilkommen, <%= Encode.forHtml(user.getFullName()) %>.</div>
 
     <div class="card-body">
         <p>

@@ -1,4 +1,5 @@
-<%@ page import="help.CSRFHelper" %><%--
+<%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %><%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 16.11.20
@@ -22,7 +23,7 @@
             </div>
             <div class="modal-body">
                 <p class="text-justify">
-                    Sind Sie sicher, dass sie das Buch <%= request.getParameter("name") %> löschen möchten?
+                    Sind Sie sicher, dass sie das Buch <%= Encode.forHtml(request.getParameter("name")) %> löschen möchten?
                 </p>
             </div>
             <div class="modal-footer">

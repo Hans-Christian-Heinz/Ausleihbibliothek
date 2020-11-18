@@ -91,18 +91,6 @@ $(document).ready(function() {
             options += '>' + page + '</option>';
         });
 
-        /*
-        <li class="nav-item dropdown">
-                        <a id="booksDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Bücher
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="booksDropdown">
-                            <a class="dropdown-item" href="<%= prefix %>/books">Alle Bücher</a>
-                            <a class="dropdown-item" href="<%= prefix %>/books/borrowed">Von Ihnen ausgeliehen</a>
-                        </div>
-                    </li>
-         */
-
         return '' +
             '<div class="d-flex justify-content-between">' +
             '<label for="selectPag">Seite</label>' +

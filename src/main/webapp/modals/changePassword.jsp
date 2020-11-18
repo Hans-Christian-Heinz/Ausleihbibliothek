@@ -7,6 +7,7 @@
 --%>
 <%@ page import="java.util.Map" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -34,7 +35,7 @@
                             if(errors.containsKey("password_old")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("password_old") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("password_old")) %></strong>
                         </span>
                         <%
                             }
@@ -52,7 +53,7 @@
                             if(errors.containsKey("password")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("password") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("password")) %></strong>
                         </span>
                         <%
                             }
@@ -70,7 +71,7 @@
                             if(errors.containsKey("password_repeat")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("password_repeat") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("password_repeat")) %></strong>
                         </span>
                         <%
                             }

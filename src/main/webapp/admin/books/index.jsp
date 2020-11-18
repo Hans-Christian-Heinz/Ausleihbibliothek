@@ -11,6 +11,7 @@
 <%@ page import="models.DBModel" %>
 <%@ page import="models.Book" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -37,7 +38,7 @@
                 <tr>
                     <td><%= book.getName() %></td>
                     <td><%= book.getAuthor() %></td>
-                    <td><%= book.getRelValue("owner") == null ? "-" : ((User)book.getRelValue("owner")).getFullName() %></td>
+                    <td><%= book.getRelValue("owner") == null ? "-" : Encode.forHtml(((User)book.getRelValue("owner")).getFullName()) %></td>
                     <td>
                         <a href="#deleteBookModal<%= model.getId() %>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Löschen</a>
                     </td>
@@ -47,12 +48,12 @@
             <tr>
                 <td>
                     <input type="text" class="form-control <%= errors.containsKey("name") ? "is-invalid" : "" %>" name="name"
-                           form="formAddBook" id="name" required placeholder="Name"/>
+                           form="formAddBook" id="name" required placeholder="Name" value="<%= Encode.forHtml(old.getOrDefault("name", "")) %>"/>
                     <%
                         if(errors.containsKey("name")) {
                     %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("name") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("name")) %></strong>
                         </span>
                     <%
                         }
@@ -60,12 +61,12 @@
                 </td>
                 <td>
                     <input type="text" class="form-control <%= errors.containsKey("author") ? "is-invalid" : "" %>"
-                           name="author" form="formAddBook" id="author" required placeholder="Autor"/>
+                           name="author" form="formAddBook" id="author" required placeholder="Autor" value="<%= Encode.forHtml(old.getOrDefault("author", "")) %>"/>
                     <%
                         if(errors.containsKey("author")) {
                     %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("author") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("author")) %></strong>
                         </span>
                     <%
                         }

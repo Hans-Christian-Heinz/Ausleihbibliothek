@@ -9,6 +9,7 @@
 <%@ page import="models.User" %>
 <%@ page import="help.UserHelp" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -35,12 +36,12 @@
                     <div class="col-md-6">
                         <input class="form-control <%= errors.containsKey("username") ? "is-invalid" : "" %>"
                                name="username" required autocomplete="on" autofocus id="username" type="text"
-                               value="<%= old.getOrDefault("username", user.getUsername()) %>" form="profile_form">
+                               value="<%= Encode.forHtml(old.getOrDefault("username", user.getUsername())) %>" form="profile_form">
                         <%
                             if(errors.containsKey("username")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("username") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("username")) %></strong>
                         </span>
                         <%
                             }
@@ -53,12 +54,12 @@
                     <div class="col-md-6">
                         <input class="form-control <%= errors.containsKey("name") ? "is-invalid" : "" %>"
                                name="name" required autocomplete="on" autofocus id="name" type="text"
-                               value="<%= old.getOrDefault("name", user.getName()) %>" form="profile_form">
+                               value="<%= Encode.forHtml(old.getOrDefault("name", user.getName())) %>" form="profile_form">
                         <%
                             if(errors.containsKey("name")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                        <strong><%= errors.get("name") %></strong>
+                        <strong><%= Encode.forHtml(errors.get("name")) %></strong>
                     </span>
                         <%
                             }
@@ -71,13 +72,13 @@
                     <div class="col-md-6">
                         <input class="form-control <%= errors.containsKey("vorname") ? "is-invalid" : "" %>"
                                name="vorname" required autocomplete="on" autofocus id="vorname" type="text"
-                               value="<%= old.getOrDefault("vorname", user.getVorname()) %>" form="profile_form">
+                               value="<%= Encode.forHtml(old.getOrDefault("vorname", user.getVorname())) %>" form="profile_form">
                         <%
                             if(errors.containsKey("vorname")) {
                         %>
                         <span class="invalid-feedback" role="alert">
-                        <strong><%= errors.get("vorname") %></strong>
-                    </span>
+                            <strong><%= Encode.forHtml(errors.get("vorname")) %></strong>
+                        </span>
                         <%
                             }
                         %>

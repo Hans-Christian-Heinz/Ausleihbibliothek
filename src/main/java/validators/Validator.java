@@ -31,6 +31,18 @@ public abstract class Validator {
 
     public abstract boolean validate();
 
+    protected boolean validateRegex(String key, String pattern) {
+        String val = params.get(key)[0];
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(val);
+
+        if (! m.matches()) {
+            errors.put(key, "Das Feld " + key + " muss dem regulären Ausdruck " + pattern + " entsprechen.");
+            return false;
+        }
+        return true;
+    }
+
     protected boolean validateRequired(String key) {
         if (! params.containsKey(key) || params.get(key).length == 0 || params.get(key)[0] == null || params.get(key)[0].isEmpty()) {
             errors.put(key, "Das Feld " + key + " muss vorhanden sein.");
@@ -192,7 +204,6 @@ public abstract class Validator {
      * Stelle sicher, dass die übergebene id die des angemeldeten Benutzers ist
      *
      * @param key
-     * @param mapper
      * @return
      * @throws NoSuchMethodException
      * @throws InstantiationException
@@ -214,7 +225,6 @@ public abstract class Validator {
      * Stelle sicher, dass die übergebene id die des angemeldeten Benutzers ist
      *
      * @param key
-     * @param mapper
      * @return
      * @throws NoSuchMethodException
      * @throws InstantiationException

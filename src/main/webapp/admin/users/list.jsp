@@ -11,6 +11,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="help.UserHelp" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -36,8 +37,8 @@
             <% for (DBModel model : users) { %>
                 <% User u = (User) model; %>
                 <tr id="tableRowUsers<%= u.getId() %>">
-                    <td><%= u.getUsername() %></td>
-                    <td><%= u.getFullName() %></td>
+                    <td><%= Encode.forHtml(u.getUsername()) %></td>
+                    <td><%= Encode.forHtml(u.getFullName()) %></td>
                     <td>
                         <%= "admin".equals(u.getRole()) ? "Admin" : "Benutzer" %>
                         <% if (! user.equals(u)) { %>
