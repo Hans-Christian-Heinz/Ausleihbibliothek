@@ -40,7 +40,7 @@
             <% Book book = (Book) model; %>
                 <tr>
                     <td><%= Encode.forHtml(book.getName()) %></td>
-                    <td><%= Encode.forHtml(book.getAuthor() %></td>
+                    <td><%= Encode.forHtml(book.getAuthor()) %></td>
                     <td><%= book.getRelValue("owner") == null ? "-" : Encode.forHtml(((User)book.getRelValue("owner")).getFullName()) %></td>
                     <td>
                         <form method="post" action="<%= prefix %>/books/borrow">

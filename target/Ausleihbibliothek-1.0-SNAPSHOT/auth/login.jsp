@@ -7,6 +7,7 @@
 --%>
 <%@ page import="java.util.Map" %>
 <%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -27,12 +28,12 @@
 
                 <div class="col-md-6">
                     <input id="username" type="text" class="form-control <%= errors.containsKey("username") ? "is-invalid" : "" %>"
-                           name="username" required autocomplete="on" autofocus value="<%= old.getOrDefault("username", "") %>">
+                           name="username" required autocomplete="on" autofocus value="<%= Encode.forHtml(old.getOrDefault("username", "")) %>">
                     <%
                         if(errors.containsKey("username")) {
                     %>
                         <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("username") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("username")) %></strong>
                         </span>
                     <%
                         }
@@ -50,7 +51,7 @@
                         if(errors.containsKey("password")) {
                     %>
                     <span class="invalid-feedback" role="alert">
-                            <strong><%= errors.get("password") %></strong>
+                            <strong><%= Encode.forHtml(errors.get("password")) %></strong>
                         </span>
                     <%
                         }

@@ -26,6 +26,7 @@ public abstract class Controller extends HttpServlet {
     protected String tpl;
     protected final Connection db;
     protected Zugang berechtigung;
+    protected String accessMsg;
 
     protected enum Zugang {
         ALLE,
@@ -44,17 +45,20 @@ public abstract class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        if (! istBerechtigt(session)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
+            return;
+        }
         UserHelp.refreshUser(session);
 
         //get the contextPath of the servlet
         req.setAttribute("contextPath", req.getContextPath());
         session.setAttribute("uri", req.getRequestURI());
 
-        if (istBerechtigt(session)) {
+        //if (istBerechtigt(session)) {
             ServletContext context = this.getServletContext();
             RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
 
-            req.setAttribute("tpl", this.tpl);
             if (session.getAttribute("keepErrors") != null && (boolean) session.getAttribute("keepErrors")) {
                 session.setAttribute("keepErrors", false);
             }
@@ -64,18 +68,25 @@ public abstract class Controller extends HttpServlet {
             }
 
             handleGet(req, resp);
+        req.setAttribute("tpl", this.tpl);
 
-            dispatcher.forward(req, resp);
-        }
+        dispatcher.forward(req, resp);
+        /*}
         else {
-            resp.sendRedirect("home");
-        }
+            resp.sendRedirect(req.getContextPath() + "/home");
+        }*/
     }
 
     protected abstract void handleGet(HttpServletRequest req, HttpServletResponse resp);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (! istBerechtigt(session)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
+            return;
+        }
+
         try {
             if (!CSRFHelper.isValid(req)) {
                 resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Es ist kein gültiges CSRF-Token vorhanden.");
@@ -87,7 +98,6 @@ public abstract class Controller extends HttpServlet {
             return;
         }
 
-        HttpSession session = req.getSession();
         UserHelp.refreshUser(session);
 
         String redirect = (String) session.getAttribute("uri");
@@ -100,7 +110,7 @@ public abstract class Controller extends HttpServlet {
         //get the contextPath  of the servlet
         req.setAttribute("contextPath", req.getContextPath());
 
-        if (istBerechtigt(req.getSession())) {
+        //if (istBerechtigt(req.getSession())) {
             String classname = this.getClass().getCanonicalName();
             String validatorname = classname.replaceFirst("controllers", "validators");
             validatorname = validatorname.replaceAll("Controller", "Validator");
@@ -137,10 +147,10 @@ public abstract class Controller extends HttpServlet {
                 session.setAttribute("keepErrors", true);
                 resp.sendRedirect(redirect);
             }
-        }
+        /*}
         else {
-            resp.sendRedirect("home");
-        }
+            resp.sendRedirect(req.getContextPath() + "/home");
+        }*/
     }
 
     /**
@@ -180,10 +190,13 @@ public abstract class Controller extends HttpServlet {
         User user = UserHelp.getUser(session);
         switch (berechtigung) {
             case GAST:
+                accessMsg = "Angemeldete Benutzer dürfen nicht auf diese Seite zugreifen.";
                 return user == null;
             case ANGEMELDET:
+                accessMsg = "Nur angemeldete Benutzer dürfen auf diese Seite zugreifen.";
                 return user != null;
             case ADMIN:
+                accessMsg = "Nur Administratoren dürfen auf diese Seite zugreifen.";
                 return user != null && "admin".equals(user.getRole());
             default:
                 return true;

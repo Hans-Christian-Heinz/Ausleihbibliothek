@@ -6,17 +6,18 @@ import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 
-public final class UserHelp {
+public class UserHelp {
     private static User user;
 
     public static User getUser(HttpSession session) {
-        if (user == null && session.getAttribute("user_id") != null) {
+        if (session != null && user == null && session.getAttribute("user_id") != null) {
             BigInteger id = (BigInteger) session.getAttribute("user_id");
             try {
                 user = (User) MappersHelper.userMapper.getById(id.longValue());
             }
             catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 //todo
+                user = null;
             }
         }
 
@@ -24,13 +25,14 @@ public final class UserHelp {
     }
 
     public static void refreshUser(HttpSession session) {
-        if (session.getAttribute("user_id") != null) {
+        if (session != null && session.getAttribute("user_id") != null) {
             BigInteger id = (BigInteger) session.getAttribute("user_id");
             try {
                 user = (User) MappersHelper.userMapper.getById(id.longValue());
             }
             catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 //todo
+                user = null;
             }
         }
         else {

@@ -7,6 +7,7 @@ import models.relationships.HasMany;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class User extends DBModel {
     private BigInteger id;
@@ -72,7 +73,11 @@ public class User extends DBModel {
     }
 
     public String getFullName() {
-        return vorname + " " + name;
+        String res;
+        res = Objects.requireNonNullElse(vorname, "");
+        if (name != null)
+            res += " " + name;
+        return res;
     }
 
     public void setVorname(String vorname) {

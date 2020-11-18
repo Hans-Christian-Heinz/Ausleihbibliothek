@@ -14,7 +14,6 @@
     User user = UserHelp.getUser(session);
 %>
 
-<%= Encode.forHtml("<h1>Test</h1>") %>
 <div class="card">
     <div class="card-header">Wilkommen, <%= Encode.forHtml(user.getFullName()) %>.</div>
 

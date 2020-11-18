@@ -42,7 +42,7 @@ public class LoginController extends Controller {
                 ((Map<String, String>)session.getAttribute("errors")).put("password", "Das Passwort stimmt nicht.");
                 ((Map<String, String>)session.getAttribute("old")).put("username", req.getParameter("username"));
                 session.setAttribute("keepErrors", true);
-                resp.sendRedirect((String) req.getAttribute("redirect"));
+                resp.sendRedirect(req.getContextPath() + "/home");
             }
         } catch (Exception e) {
             e.printStackTrace();

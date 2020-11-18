@@ -18,7 +18,7 @@ public class HomeController extends Controller {
 
     @Override
     protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
-        HttpSession session = req.getSession();
+        HttpSession session = req.getSession(false);
         UserHelp.refreshUser(session);
         if (UserHelp.getUser(session) != null) {
             tpl = "welcome.jsp";
