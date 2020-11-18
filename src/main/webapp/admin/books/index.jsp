@@ -10,6 +10,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="models.DBModel" %>
 <%@ page import="models.Book" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -73,6 +74,7 @@
                 <td></td>
                 <td>
                     <form method="post" action="<%= prefix %>/admin/books" id="formAddBook">
+                        <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                         <input type="submit" class="btn btn-primary" value="Hinzufügen"/>
                     </form>
                 </td>

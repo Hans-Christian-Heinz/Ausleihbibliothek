@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 
-public class UserHelp {
+public final class UserHelp {
     private static User user;
 
     public static User getUser(HttpSession session) {

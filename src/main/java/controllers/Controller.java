@@ -2,6 +2,7 @@ package controllers;
 
 import java.lang.reflect.*;
 import db.DatabaseHelper;
+import help.CSRFHelper;
 import help.UserHelp;
 import models.User;
 import validators.FalseValidator;
@@ -71,6 +72,17 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            if (!CSRFHelper.isValid(req)) {
+                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Es ist kein gültiges CSRF-Token vorhanden.");
+                return;
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Es ist kein gültiges CSRF-Token vorhanden.");
+            return;
+        }
+
         HttpSession session = req.getSession();
         UserHelp.refreshUser(session);
 

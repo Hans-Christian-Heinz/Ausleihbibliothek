@@ -1,4 +1,4 @@
-<%--
+<%@ page import="help.CSRFHelper" %><%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 16.11.20
@@ -29,6 +29,7 @@
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
                 <form class="form" action="<%= prefix %>/admin/users/delete" method="POST">
+                    <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                     <input type="hidden" name="id" value="<%= request.getParameter("uid") %>"/>
                     <button type="submit" class="btn btn-danger">Benutzerprofil löschen</button>
                 </form>

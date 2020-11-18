@@ -8,6 +8,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="models.User" %>
 <%@ page import="help.UserHelp" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -87,6 +88,7 @@
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
                 <form class="form" id="profile_form" action="<%= prefix %>/profile/edit" method="POST">
+                    <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                     <button type="submit" class="btn btn-primary">Profil speichern</button>
                 </form>
             </div>

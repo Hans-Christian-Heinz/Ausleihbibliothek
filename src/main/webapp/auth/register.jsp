@@ -6,6 +6,7 @@
   Formular zum Abmelden
 --%>
 <%@ page import="java.util.Map" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -18,7 +19,7 @@
     <div class="card-header">Registrieren</div>
     <div class="card-body">
         <form method="POST" action="<%= prefix %>/register">
-            <%-- TODO csrf --%>
+            <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
 
             <div class="form-group row">
                 <label for="username" class="col-md-4 col-form-label text-md-right">Benutzername</label>

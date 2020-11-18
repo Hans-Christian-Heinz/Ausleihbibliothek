@@ -7,6 +7,7 @@
 --%>
 <%@ page import="models.User" %>
 <%@ page import="help.UserHelp" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -64,7 +65,11 @@
                             <a class="dropdown-item" data-toggle="modal" href="#editProfileModal">Profil bearbeiten</a>
                             <a class="dropdown-item" data-toggle="modal" href="#changePwdModal">Passwort ändern</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<%= prefix %>/logout">Abmelden</a>
+                            <a class="dropdown-item" href="<%= prefix %>/logout"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Abmelden</a>
+                            <form id="logout-form" action="<%= prefix %>/logout" method="POST" style="display: none;">
+                                <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
+                            </form>
                         </div>
                     </li>
                 <% } %>

@@ -10,6 +10,7 @@
 <%@ page import="models.DBModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="help.UserHelp" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -41,6 +42,7 @@
                         <%= "admin".equals(u.getRole()) ? "Admin" : "Benutzer" %>
                         <% if (! user.equals(u)) { %>
                             <form action="<%= prefix %>/admin/users/changeRole" method="post">
+                                <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                                 <input type="hidden" name="id" value="<%= u.getId() %>"/>
                                 <input type="submit" class="btn btn-small btn-outline-secondary"
                                        value="<%= "admin".equals(u.getRole()) ? "Profil abwerten" : "Profil aufwerten" %>"/>

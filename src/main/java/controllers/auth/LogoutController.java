@@ -15,13 +15,8 @@ public class LogoutController extends Controller {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().invalidate();
-        super.doGet(req, resp);
-    }
-
-    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        req.getSession().invalidate();
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }

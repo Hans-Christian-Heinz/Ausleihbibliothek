@@ -10,6 +10,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="models.Book" %>
 <%@ page import="help.UserHelp" %>
+<%@ page import="help.CSRFHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -36,6 +37,7 @@
                 <td><%= book.getAuthor() %></td>
                 <td>
                     <form method="post" action="<%= prefix %>/books/borrow">
+                        <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                         <input type="hidden" name="id" value="<%= book.getId() %>"/>
                         <input type="hidden" name="user_id" value="<%= book.getAusgeliehenVon() == null ? "0" : book.getAusgeliehenVon() %>"/>
                         <% if (book.getAusgeliehenVon() == null) { %>
