@@ -23,6 +23,11 @@ public class ChangeRoleController extends Controller {
     }
 
     @Override
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
+    }
+
+    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserMapper mapper = MappersHelper.userMapper;
         try {

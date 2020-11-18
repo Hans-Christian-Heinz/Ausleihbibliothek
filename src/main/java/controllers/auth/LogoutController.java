@@ -15,6 +15,11 @@ public class LogoutController extends Controller {
     }
 
     @Override
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
+    }
+
+    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().invalidate();
         resp.sendRedirect(req.getContextPath() + "/login");

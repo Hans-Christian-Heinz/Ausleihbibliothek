@@ -63,12 +63,16 @@ public abstract class Controller extends HttpServlet {
                 session.setAttribute("old", new HashMap<>());
             }
 
+            handleGet(req, resp);
+
             dispatcher.forward(req, resp);
         }
         else {
             resp.sendRedirect("home");
         }
     }
+
+    protected abstract void handleGet(HttpServletRequest req, HttpServletResponse resp);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

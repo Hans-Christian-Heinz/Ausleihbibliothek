@@ -17,7 +17,7 @@ public class HomeController extends Controller {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         UserHelp.refreshUser(session);
         if (UserHelp.getUser(session) != null) {
@@ -26,7 +26,6 @@ public class HomeController extends Controller {
         else {
             tpl = "auth/login.jsp";
         }
-        super.doGet(req, resp);
     }
 
     @Override

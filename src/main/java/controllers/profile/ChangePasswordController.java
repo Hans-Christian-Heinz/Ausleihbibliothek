@@ -26,6 +26,11 @@ public class ChangePasswordController extends Controller {
     }
 
     @Override
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
+    }
+
+    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserMapper mapper = MappersHelper.userMapper;
         //first: validate the password_old (Rest der Validierung passiert in der Superklasse Controller

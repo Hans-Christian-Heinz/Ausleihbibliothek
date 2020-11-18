@@ -30,6 +30,11 @@ public class AusleihController extends Controller {
     }
 
     @Override
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
+    }
+
+    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DBMapper mapper = MappersHelper.bookMapper;
         try {

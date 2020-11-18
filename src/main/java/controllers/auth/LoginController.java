@@ -20,6 +20,11 @@ public class LoginController extends Controller {
     }
 
     @Override
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
+    }
+
+    @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         UserMapper mapper = MappersHelper.userMapper;
         try {
