@@ -14,8 +14,12 @@ import java.io.IOException;
 public class LogoutController extends Controller {
     public LogoutController() {
         super();
-        tpl = "auth/login.jsp";
         berechtigung = Zugang.ANGEMELDET;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //do nothing
     }
 
     @Override

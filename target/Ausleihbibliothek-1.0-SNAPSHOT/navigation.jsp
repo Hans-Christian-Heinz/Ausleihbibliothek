@@ -67,7 +67,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="<%= prefix %>/logout"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Abmelden</a>
-                            <form id="logout-form" action="<%= prefix %>/logout" method="POST" style="display: none;">
+                            <form id="logout-form" action="<%= prefix %>/logout" method="POST" class="d-none">
                                 <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
                             </form>
                         </div>

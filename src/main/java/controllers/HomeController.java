@@ -31,5 +31,6 @@ public class HomeController extends Controller {
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //do nothing
+        //todo 405 method not allowed (not to be used for get unfortunately)
     }
 }

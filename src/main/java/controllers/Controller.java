@@ -44,6 +44,15 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //this does make sense but I don't want to bother conforming to the rules for an exercise-project
+        /*resp.setHeader("Content-Security-Policy",
+                "default-src 'self'; " +
+                        "img-src 'none'; " +
+                        "object-src 'none'; " +
+                        "script-src 'self' code.jquery.com cdn.jsdelivr.net; " +
+                        "style-src 'self' cdn.jsdelivr.net unsafe-inline"
+        );*/
+
         HttpSession session = req.getSession();
         if (! istBerechtigt(session)) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
@@ -81,6 +90,14 @@ public abstract class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*resp.setHeader("Content-Security-Policy",
+                "default-src 'self'; " +
+                        "img-src 'none'; " +
+                        "object-src 'none'; " +
+                        "script-src 'self' code.jquery.com cdn.jsdelivr.net; " +
+                        "style-src * unsafe-inline"
+        );*/
+
         HttpSession session = req.getSession();
         if (! istBerechtigt(session)) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
