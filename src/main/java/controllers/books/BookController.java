@@ -25,13 +25,13 @@ public class BookController extends Controller {
         int perPage;
         int currentPage;
         if (req.getParameter("perPage") == null) {
-            perPage = 2;
+            perPage = 1;
         }
          else {
             perPage = Integer.parseInt(req.getParameter("perPage"));
         }
         if (req.getParameter("currentPage") == null) {
-            currentPage = 1;
+            currentPage = 0;
         }
         else {
             currentPage = Integer.parseInt(req.getParameter("currentPage")) - 1;
@@ -43,6 +43,7 @@ public class BookController extends Controller {
         }
 
         req.setAttribute("totalPages", totalPages);
+        req.setAttribute("currentPage", currentPage);
 
         //List<DBModel> books = mapper.getAll();
         List<DBModel> books = mapper.getPagination(perPage, currentPage);
