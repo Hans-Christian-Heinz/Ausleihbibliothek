@@ -127,6 +127,37 @@ public abstract class Controller extends HttpServlet {
         }
     }
 
+    /**
+     * Hilfsmethode für Pagination
+     *
+     * @param req
+     * @param count Die Gesamtanzahl der anzuzeigenden Elemente
+     */
+    protected void paginationHelp(HttpServletRequest req, int count) {
+        int perPage;
+        int currentPage;
+        if (req.getParameter("perPage") == null) {
+            perPage = 10;
+        }
+        else {
+            perPage = Integer.parseInt(req.getParameter("perPage"));
+        }
+        if (req.getParameter("currentPage") == null) {
+            currentPage = 0;
+        }
+        else {
+            currentPage = Integer.parseInt(req.getParameter("currentPage")) - 1;
+        }
+        int totalPages = count/perPage;
+        if (count%perPage > 0) {
+            totalPages++;
+        }
+
+        req.setAttribute("perPage", perPage);
+        req.setAttribute("totalPages", totalPages);
+        req.setAttribute("currentPage", currentPage);
+    }
+
     protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 
     private boolean istBerechtigt(HttpSession session) {

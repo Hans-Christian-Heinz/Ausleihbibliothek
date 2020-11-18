@@ -62,6 +62,10 @@
     </div>
 </div>
 
+<jsp:include page="/pagination.jsp">
+    <jsp:param name="href" value="/admin/users"/>
+</jsp:include>
+
 <% for (DBModel model : users) { %>
 <jsp:include page="/modals/deleteUser.jsp">
     <jsp:param name="fullName" value="<%= ((User)model).getFullName() %>"/>

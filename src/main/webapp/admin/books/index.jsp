@@ -81,6 +81,10 @@
     </div>
 </div>
 
+<jsp:include page="/pagination.jsp">
+    <jsp:param name="href" value="/admin/books"/>
+</jsp:include>
+
 <% for (DBModel model : books) { %>
 <jsp:include page="/modals/deleteBook.jsp">
     <jsp:param name="bid" value="<%= model.getId() %>"/>

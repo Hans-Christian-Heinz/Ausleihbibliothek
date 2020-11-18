@@ -21,7 +21,6 @@ $(document).ready(function() {
         let _this = this;
         $(this).popover("show");
         $("select.paginationSelect").change(goToPage);
-        //document.getElementById("paginationSelect").forEach(el => el.addEventListener("change", goToPage));
         $(".popover").on("mouseleave", function() {
             $(_this).popover('hide');
         });
@@ -34,16 +33,17 @@ $(document).ready(function() {
         }, 300);
     });
 
-    function goToPage(e) {
+    $('input[type=number]#perPage').change(changePerPage);
+
+    function replaceQueryString(name, value) {
         const url = window.location.href;
-        const page = $(e.target).val();
         //query-String
         let qs;
-        //replace or add query string currentPage=page
+        //replace or add query string name=value
         const index = url.indexOf("?");
         if (index !== -1) {
             qs = url.substr(index);
-            const cpIndex = qs.indexOf("currentPage=");
+            const cpIndex = qs.indexOf(name + "=");
             if (cpIndex !== -1) {
                 const cpEnd = qs.indexOf("&", cpIndex);
                 let cpStr;
@@ -53,19 +53,29 @@ $(document).ready(function() {
                 else {
                     cpStr = qs.substr(cpIndex);
                 }
-                qs = qs.replace(cpStr, "currentPage=" + page);
+                qs = qs.replace(cpStr, name + "=" + value);
             }
             else {
-                qs += "&currentPage=" + page;
+                qs += "&" + name + "=" + value;
             }
 
             window.location.href = url.substr(0, index) + qs;
         }
         else {
-            qs = "?currentPage=" + page;
+            qs = "?" + name + "=" + value;
 
             window.location.href = url + qs;
         }
+    }
+
+    function changePerPage(e) {
+        const perPage = $(e.target).val();
+        replaceQueryString("perPage", perPage);
+    }
+
+    function goToPage(e) {
+        const page = $(e.target).val();
+        replaceQueryString("currentPage", page);
     }
 
     function popoverContent() {

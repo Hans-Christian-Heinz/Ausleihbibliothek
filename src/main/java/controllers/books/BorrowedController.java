@@ -23,7 +23,11 @@ public class BorrowedController extends Controller {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = UserHelp.getUser(session);
-        List<DBModel> books = (List) user.getRelValue("books");
+        paginationHelp(req, user.getRelCount("books"));
+        int perPage = (int) req.getAttribute("perPage");
+        int currentPage = (int) req.getAttribute("currentPage");
+
+        List<DBModel> books = (List) user.getRelValue("books", perPage, currentPage);
         req.setAttribute("books", books);
 
         super.doGet(req, resp);

@@ -6,6 +6,7 @@ import models.DBModel;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
+import java.util.List;
 
 public class HasMany extends Relationship {
     public HasMany(Class<? extends DBModel> ownerClass, Class<? extends DBModel> otherClass, String otherFk) {
@@ -16,6 +17,10 @@ public class HasMany extends Relationship {
 
     @Override
     public Object queryRelationship(DBModel owner) {
+        return queryRelationship(owner, -1, -1);
+    }
+
+    public List<DBModel> queryRelationship(DBModel owner, int perPage, int currentPage) {
         if (! ownerClass.isInstance(owner)) {
             //todo exception
         }
@@ -24,7 +29,12 @@ public class HasMany extends Relationship {
         try {
             Method getMapper = otherClass.getDeclaredMethod("getMapper");
             DBMapper mapper = (DBMapper) getMapper.invoke(otherClass);
-            return mapper.getAllWhereIndex(otherFk, id.toString());
+            if (perPage <= 0 || currentPage < 0) {
+                return mapper.getAllWhereIndex(otherFk, id.toString());
+            }
+            else {
+                return mapper.getPaginationWhereIndex(otherFk, id.toString(), perPage, currentPage);
+            }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -34,6 +44,18 @@ public class HasMany extends Relationship {
         }
 
         return null;
+    }
+
+    public int count(DBModel owner) {
+        try {
+            Method getMapper = otherClass.getDeclaredMethod("getMapper");
+            DBMapper mapper = (DBMapper) getMapper.invoke(otherClass);
+
+            return mapper.countWhereIndex(otherFk, owner.getId().toString());
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /*@Override

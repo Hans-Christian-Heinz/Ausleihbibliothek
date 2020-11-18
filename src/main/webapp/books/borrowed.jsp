@@ -50,3 +50,7 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/pagination.jsp">
+    <jsp:param name="href" value="/books/borrowed"/>
+</jsp:include>

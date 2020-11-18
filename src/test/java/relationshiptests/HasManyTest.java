@@ -54,4 +54,16 @@ public class HasManyTest {
         assertEquals(b2, lb.get(0));
         assertEquals(b3, lb.get(1));
     }
+
+    @Test
+    void getRelCount() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        UserMapper mapper = MappersHelper.userMapper;
+        DBModel u1 = mapper.getById(1);
+        DBModel u2 = mapper.getById(2);
+        List<DBModel> l1 = (List<DBModel>) u1.getRelValue("books");
+        List<DBModel> l2 = (List<DBModel>) u2.getRelValue("books");
+
+        assertEquals(u1.getRelCount("books"), l1.size());
+        assertEquals(u2.getRelCount("books"), l2.size());
+    }
 }

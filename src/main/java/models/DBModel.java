@@ -1,5 +1,6 @@
 package models;
 
+import models.relationships.HasMany;
 import models.relationships.Relationship;
 
 import java.io.Serializable;
@@ -16,21 +17,49 @@ public abstract class DBModel implements Serializable {
     public abstract String getTable();
     public abstract Map<String, String> getPropertyMap();
 
-    private Object queryRelationship(String relName) {
+    private Object queryRelationship(String relName, int perPage, int currentPage) {
         Relationship rel = relationships.get(relName);
         if (rel == null) {
             return null;
         }
-        return rel.queryRelationship(this);
+
+        if (rel instanceof HasMany) {
+            return ((HasMany) rel).queryRelationship(this, perPage, currentPage);
+        } else {
+            return rel.queryRelationship(this);
+        }
     }
 
     public Object getRelValue(String relName) {
+        return getRelValue(relName, -1, -1);
+    }
+
+    public Object getRelValue(String relName, int perPage, int currentPage) {
         Object val = relValues.get(relName);
         if (val != null && val.equals("")) {
-            val = queryRelationship(relName);
+            val = queryRelationship(relName, perPage, currentPage);
             relValues.put(relName, val);
         }
 
         return val;
+    }
+
+    public int getRelCount(String relName) {
+        if (relationships.containsKey(relName)) {
+            Relationship rel = relationships.get(relName);
+            if (rel instanceof HasMany) {
+                return ((HasMany)rel).count(this);
+            }
+            else {
+                Object val = getRelValue(relName);
+                if (val == null || "".equals(val)) {
+                    return 0;
+                }
+                else {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 }

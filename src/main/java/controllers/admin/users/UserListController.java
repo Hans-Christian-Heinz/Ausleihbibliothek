@@ -21,9 +21,14 @@ public class UserListController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO: get users;  pagination
         UserMapper mapper = MappersHelper.userMapper;
-        List<DBModel> users = mapper.getAll();
+
+        paginationHelp(req, mapper.count());
+        int perPage = (int) req.getAttribute("perPage");
+        int currentPage = (int) req.getAttribute("currentPage");
+
+        //List<DBModel> books = mapper.getAll();
+        List<DBModel> users = mapper.getPagination(perPage, currentPage);
         req.setAttribute("users", users);
 
         super.doGet(req, resp);

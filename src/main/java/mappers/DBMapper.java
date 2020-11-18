@@ -121,7 +121,7 @@ public abstract class DBMapper {
     }
 
     /**
-     * Gebe eine Liste aller Datensätze aus; todo pagination
+     * Gebe eine Liste aller Datensätze aus;
      *
      * @return
      */
@@ -147,6 +147,22 @@ public abstract class DBMapper {
         return executeSelect(query.toString());
     }
 
+    public List<DBModel> getPaginationWhereIndex(String index, String val, int perPage, int currentPage) {
+        StringBuilder query = this.getSelectHelp();
+        if (index != null) {
+            query.append(" WHERE " + propertyMap.get(index) + "=");
+            if (val == null) {
+                query.append("NULL");
+            }
+            else {
+                query.append("'").append(val).append("'");
+            }
+        }
+        query.append(" LIMIT ").append(perPage).append(" OFFSET ").append(perPage * currentPage).append(";");
+
+        return executeSelect(query.toString());
+    }
+
     /**
      * Gebe die Anzahl an Datensätzen aus.
      *
@@ -154,6 +170,27 @@ public abstract class DBMapper {
      */
     public int count() {
         String query = "SELECT COUNT(id) AS anzahl FROM " + table + ";";
+
+        try {
+            Statement stmt = db.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            //First, da bei id-Suche nur eine Zeile ausgelesen wird
+            //Eigentlich lieber res.first(), das funktioniert aber mit sqlite nicht. (Test-DB)
+            if (res.next()) {
+                return res.getInt("anzahl");
+            }
+            else {
+                return 0;
+            }
+        } catch(SQLException e) {
+            //TODO
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int countWhereIndex(String index, String val) {
+        String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + propertyMap.get(index) + "=" + val + ";";
 
         try {
             Statement stmt = db.createStatement();

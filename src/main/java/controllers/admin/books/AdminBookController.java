@@ -24,7 +24,13 @@ public class AdminBookController extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBMapper mapper = MappersHelper.bookMapper;
-        List<DBModel> books = mapper.getAll();
+
+        paginationHelp(req, mapper.count());
+        int perPage = (int) req.getAttribute("perPage");
+        int currentPage = (int) req.getAttribute("currentPage");
+
+        //List<DBModel> books = mapper.getAll();
+        List<DBModel> books = mapper.getPagination(perPage, currentPage);
         req.setAttribute("books", books);
 
         super.doGet(req, resp);
