@@ -7,8 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<h3>Es ist ein Problem aufgetreten.</h3>
-<p>
-    Es kann nicht auf die Datenbank zugegriffen werden. Überprüfen Sie, ob die Datenbank "bibliothek" existiert und
-    für den Benutzer "bibliothek" zugänlich ist.
-</p>
+<div class="alert alert-danger mb-0">
+    <p>
+        <b>Es ist ein Problem aufgetreten.</b>
+        <br/>
+        Es kann nicht auf die Datenbank zugegriffen werden. Überprüfen Sie, ob die Datenbank "bibliothek" existiert und
+        für den Benutzer "bibliothek" zugänlich ist.
+    </p>
+</div>

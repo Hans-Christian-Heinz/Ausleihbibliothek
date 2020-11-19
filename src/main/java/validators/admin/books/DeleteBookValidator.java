@@ -1,5 +1,6 @@
 package validators.admin.books;
 
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import models.Book;
 import models.User;
@@ -12,7 +13,7 @@ public class DeleteBookValidator extends Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate() throws DBMapperException {
         boolean valid = true;
 
         valid = valid && this.validateExists("id", MappersHelper.bookMapper);

@@ -1,5 +1,6 @@
 package models;
 
+import exceptions.DBMapperException;
 import models.relationships.HasMany;
 import models.relationships.Relationship;
 
@@ -15,7 +16,7 @@ public abstract class DBModel implements Serializable {
     public abstract BigInteger getId();
     public abstract void setId(Integer id);
 
-    private Object queryRelationship(String relName, int perPage, int currentPage) {
+    private Object queryRelationship(String relName, int perPage, int currentPage) throws DBMapperException {
         Relationship rel = relationships.get(relName);
         if (rel == null) {
             return null;
@@ -28,11 +29,11 @@ public abstract class DBModel implements Serializable {
         }
     }
 
-    public Object getRelValue(String relName) {
+    public Object getRelValue(String relName) throws DBMapperException {
         return getRelValue(relName, -1, -1);
     }
 
-    public Object getRelValue(String relName, int perPage, int currentPage) {
+    public Object getRelValue(String relName, int perPage, int currentPage) throws DBMapperException {
         Object val = relValues.get(relName);
         if (val != null && val.equals("")) {
             val = queryRelationship(relName, perPage, currentPage);
@@ -42,7 +43,7 @@ public abstract class DBModel implements Serializable {
         return val;
     }
 
-    public int getRelCount(String relName) {
+    public int getRelCount(String relName) throws DBMapperException {
         if (relationships.containsKey(relName)) {
             Relationship rel = relationships.get(relName);
             if (rel instanceof HasMany) {

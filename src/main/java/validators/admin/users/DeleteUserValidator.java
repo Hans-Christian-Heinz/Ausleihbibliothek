@@ -1,5 +1,6 @@
 package validators.admin.users;
 
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import models.User;
 import validators.Validator;
@@ -13,21 +14,11 @@ public class DeleteUserValidator extends Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate() throws DBMapperException {
         boolean valid = true;
 
         valid = valid && this.validateExists("id", MappersHelper.userMapper);
-        try {
-            valid = valid && this.validateNotSelf("id");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        valid = valid && this.validateNotSelf("id");
 
         return valid;
     }

@@ -1,6 +1,7 @@
 package mappers;
 
 import db.DatabaseHelper;
+import exceptions.DBMapperException;
 import models.DBModel;
 
 import java.lang.reflect.InvocationTargetException;
@@ -66,13 +67,15 @@ public abstract class DBMapper {
      * @param index
      * @param val
      * @return
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
+     * @throws DBMapperException
      */
-    public DBModel getByKey(String index, String val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        DBModel model = modelClass.getConstructor().newInstance();
+    public DBModel getByKey(String index, String val) throws DBMapperException {
+        DBModel model;
+        try {
+            model = modelClass.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new DBMapperException("Klasse " + modelClass.getCanonicalName() + " konnte nicht instanziiert werden.");
+        }
 
         Set<String> keySet = propertyMap.keySet();
 
@@ -93,18 +96,22 @@ public abstract class DBMapper {
                     if (value != null) {
                         //Method setter =
                         //      modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), feld.getType());
-                        Method setter =
-                                modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), value.getClass());
-                        setter.invoke(model, value);
+                        String methodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
+                        try {
+                            Method setter = modelClass.getDeclaredMethod(methodName, value.getClass());
+                            setter.invoke(model, value);
+                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                            throw new DBMapperException("Methode " + methodName + " konnte auf einer Instanz von "
+                                    + modelClass.getCanonicalName() + " nicht aufgerufen werden.");
+                        }
                     }
                 }
             }
             else {
                 return null;
             }
-        } catch(SQLException | NoSuchMethodException e) {
-            //TODO
-            e.printStackTrace();
+        } catch(SQLException e) {
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query.toString());
         }
 
         return model;
@@ -115,7 +122,7 @@ public abstract class DBMapper {
      *
      * @param id
      */
-    public DBModel getById(long id) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public DBModel getById(long id) throws DBMapperException {
         return this.getByKey("id", String.valueOf(id));
     }
 

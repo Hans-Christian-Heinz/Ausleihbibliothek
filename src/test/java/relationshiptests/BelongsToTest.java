@@ -1,5 +1,6 @@
 package relationshiptests;
 
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.DBMapper;
@@ -20,18 +21,22 @@ public class BelongsToTest{
     }
 
     @Test
-    void queryRelationshipTest() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        DBMapper mapper = MappersHelper.bookMapper;
-        DBMapper userMapper = MappersHelper.userMapper;
+    void queryRelationshipTest() {
+        try {
+            DBMapper mapper = MappersHelper.bookMapper;
+            DBMapper userMapper = MappersHelper.userMapper;
 
-        Book b1 = (Book) mapper.getById(1);
-        BelongsTo rel = new BelongsTo(Book.class, User.class, "ausgeliehenVon");
-        assertNull(rel.queryRelationship(b1));
-        assertNull(b1.getRelValue("owner"));
+            Book b1 = (Book) mapper.getById(1);
+            BelongsTo rel = new BelongsTo(Book.class, User.class, "ausgeliehenVon");
+            assertNull(rel.queryRelationship(b1));
+            assertNull(b1.getRelValue("owner"));
 
-        Book b2 = (Book) mapper.getById(2);
-        User u2 = (User) userMapper.getById(2);
-        assertEquals(u2, rel.queryRelationship(b2));
-        assertEquals(u2, b2.getRelValue("owner"));
+            Book b2 = (Book) mapper.getById(2);
+            User u2 = (User) userMapper.getById(2);
+            assertEquals(u2, rel.queryRelationship(b2));
+            assertEquals(u2, b2.getRelValue("owner"));
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 }

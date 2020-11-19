@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.UserMapper;
@@ -41,13 +42,7 @@ public class UserMapperTest {
             u2.setId(BigInteger.valueOf(1));
             assertTrue(user instanceof User);
             assertEquals(user, u2);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (DBMapperException e) {
             e.printStackTrace();
         }
     }
@@ -65,13 +60,7 @@ public class UserMapperTest {
             u2.setId(BigInteger.valueOf(2));
             assertTrue(user instanceof User);
             assertEquals(user, u2);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (DBMapperException e) {
             e.printStackTrace();
         }
     }
@@ -122,7 +111,7 @@ public class UserMapperTest {
     }
 
     @Test
-    void insert() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException, InstantiationException, SQLException {
+    void insert() {
         User user = new User();
         user.setPassword("pwd");
         user.setUsername("a.xyz");
@@ -130,16 +119,29 @@ public class UserMapperTest {
         user.setVorname("Abc");
         user.setRole("admin");
 
-        mapper.insert(user);
-        assertEquals(mapper.getById(3), user);
+        try {
+            mapper.insert(user);
+        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            assertEquals(mapper.getById(3), user);
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    void update() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-        User user = (User) mapper.getById(1);
-        user.setVorname("Maximilian");
-        mapper.update(user);
-        assertEquals(user, mapper.getById(1));
+    void update() {
+        User user = null;
+        try {
+            user = (User) mapper.getById(1);
+            user.setVorname("Maximilian");
+            mapper.update(user);
+            assertEquals(user, mapper.getById(1));
+        } catch (DBMapperException | NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

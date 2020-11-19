@@ -3,6 +3,7 @@ package controllers;
 import java.lang.reflect.*;
 
 import db.DatabaseHelper;
+import exceptions.DBMapperException;
 import help.CSRFHelper;
 import help.UserHelp;
 import models.User;
@@ -78,17 +79,23 @@ public abstract class Controller extends HttpServlet {
                 session.setAttribute("old", new HashMap<>());
             }
 
+        try {
             handleGet(req, resp);
-        req.setAttribute("tpl", this.tpl);
+            req.setAttribute("tpl", this.tpl);
+            dispatcher.forward(req, resp);
+        } catch (DBMapperException e) {
+            req.setAttribute("tpl", "errors/mapperError.jsp");
+            req.setAttribute("message", e.getMessage());
 
-        dispatcher.forward(req, resp);
+            dispatcher.forward(req, resp);
+        }
         /*}
         else {
             resp.sendRedirect(req.getContextPath() + "/home");
         }*/
     }
 
-    protected abstract void handleGet(HttpServletRequest req, HttpServletResponse resp);
+    protected abstract void handleGet(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -144,27 +151,35 @@ public abstract class Controller extends HttpServlet {
 
         req.setAttribute("tpl", this.tpl);
 
-        if (validator.validate()) {
-            req.setAttribute("errors", new HashMap<>());
-            req.setAttribute("old", new HashMap<>());
+        try {
+            if (validator.validate()) {
+                req.setAttribute("errors", new HashMap<>());
+                req.setAttribute("old", new HashMap<>());
 
-            this.handlePost(req, resp);
-        }
-        else {
-            session.setAttribute("errors", validator.getErrors());
-
-            Map<String, String> old = new HashMap<>();
-            Enumeration<String> names = req.getParameterNames();
-            while (names.hasMoreElements()) {
-                String key = names.nextElement();
-                old.put(key, req.getParameter(key));
+                this.handlePost(req, resp);
             }
-            session.setAttribute("old", old);
+            else {
+                session.setAttribute("errors", validator.getErrors());
 
-            //redirect back
-            //Stelle sicher, dass errors und old in der Session nicht verworfen werden
-            session.setAttribute("keepErrors", true);
-            resp.sendRedirect(redirect);
+                Map<String, String> old = new HashMap<>();
+                Enumeration<String> names = req.getParameterNames();
+                while (names.hasMoreElements()) {
+                    String key = names.nextElement();
+                    old.put(key, req.getParameter(key));
+                }
+                session.setAttribute("old", old);
+
+                //redirect back
+                //Stelle sicher, dass errors und old in der Session nicht verworfen werden
+                session.setAttribute("keepErrors", true);
+                resp.sendRedirect(redirect);
+            }
+        } catch (DBMapperException e) {
+            req.setAttribute("tpl", "errors/mapperError.jsp");
+            req.setAttribute("message", e.getMessage());
+
+            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/layout.jsp");
+            dispatcher.forward(req, resp);
         }
         /*}
         else {
@@ -203,7 +218,7 @@ public abstract class Controller extends HttpServlet {
         req.setAttribute("currentPage", currentPage);
     }
 
-    protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException;
+    protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, DBMapperException;
 
     private boolean istBerechtigt(HttpSession session) {
         User user = UserHelp.getUser(session);

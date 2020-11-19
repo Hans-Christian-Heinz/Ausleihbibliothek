@@ -1,6 +1,7 @@
 package controllers.books;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import help.UserHelp;
 import mappers.BookMapper;
@@ -9,6 +10,8 @@ import mappers.UserMapper;
 import models.Book;
 import models.User;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +33,7 @@ public class AusleihController extends Controller {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         //do nothing
     }
 
@@ -40,7 +43,7 @@ public class AusleihController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
         try {
             User user = UserHelp.getUser(req.getSession());
@@ -57,15 +60,7 @@ public class AusleihController extends Controller {
 
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (InvocationTargetException | NoSuchFieldException | NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

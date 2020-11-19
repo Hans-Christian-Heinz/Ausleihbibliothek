@@ -1,5 +1,6 @@
 package validators.auth;
 
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import models.User;
 import validators.Validator;
@@ -12,7 +13,7 @@ public class LoginValidator extends Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate() throws DBMapperException {
         boolean valid = true;
 
         valid = valid && validateRequired("username");

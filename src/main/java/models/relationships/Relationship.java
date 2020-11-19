@@ -1,5 +1,6 @@
 package models.relationships;
 
+import exceptions.DBMapperException;
 import models.DBModel;
 
 public abstract class Relationship {
@@ -8,7 +9,7 @@ public abstract class Relationship {
     protected String ownFk;
     protected String otherFk;
 
-    public abstract Object queryRelationship(DBModel owner);
+    public abstract Object queryRelationship(DBModel owner) throws DBMapperException;
     //public abstract String getSqlJoin();
 
     public Class<? extends DBModel> getOwnerClass() {

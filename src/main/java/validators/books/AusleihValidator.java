@@ -1,5 +1,6 @@
 package validators.books;
 
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import models.Book;
 import models.User;
@@ -15,21 +16,11 @@ public class AusleihValidator extends Validator {
     }
 
     @Override
-    public boolean validate() {
+    public boolean validate() throws DBMapperException {
         boolean valid = true;
 
         valid = valid && validateExists("id", MappersHelper.bookMapper);
-        try {
-            valid = valid && (validateEqual("user_id", "0") || validateSelf("user_id"));
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        valid = valid && (validateEqual("user_id", "0") || validateSelf("user_id"));
 
         if (valid) {
             errors = new HashMap<>();

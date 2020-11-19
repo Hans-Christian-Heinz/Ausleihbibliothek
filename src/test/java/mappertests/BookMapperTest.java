@@ -1,6 +1,7 @@
 package mappertests;
 
 import db.DatabaseHelper;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import helpers.HelpTesting;
 import mappers.BookMapper;
@@ -42,13 +43,7 @@ public class BookMapperTest {
             b2.setId(BigInteger.valueOf(1));
             assertTrue(book instanceof Book);
             assertEquals(book, b2);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (DBMapperException e) {
             e.printStackTrace();
         }
     }
@@ -107,21 +102,42 @@ public class BookMapperTest {
     }
 
     @Test
-    void insert() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException, InstantiationException, SQLException {
+    void insert() {
         Book book = new Book();
         book.setAuthor("Robert Harris");
         book.setName("Das Schweigen der Lämmer");
 
-        mapper.insert(book);
-        assertEquals(mapper.getById(4), book);
+        try {
+            mapper.insert(book);
+        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            assertEquals(mapper.getById(4), book);
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    void update() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-        Book book = (Book) mapper.getById(2);
+    void update() {
+        Book book = null;
+        try {
+            book = (Book) mapper.getById(2);
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
         book.setAuthor("Dashiell Hammit");
-        mapper.update(book);
-        assertEquals(book, mapper.getById(2));
+        try {
+            mapper.update(book);
+        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        try {
+            assertEquals(book, mapper.getById(2));
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

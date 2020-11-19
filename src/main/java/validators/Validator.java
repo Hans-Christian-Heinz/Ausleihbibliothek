@@ -1,6 +1,7 @@
 package validators;
 
 import db.DatabaseHelper;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.DBMapper;
 import mappers.UserMapper;
@@ -30,7 +31,7 @@ public abstract class Validator {
         this.currentUser = currentUser;
     }
 
-    public abstract boolean validate();
+    public abstract boolean validate() throws DBMapperException;
 
     protected boolean validateRegex(String key, String pattern) {
         String val = params.get(key)[0];
@@ -171,13 +172,13 @@ public abstract class Validator {
      * @param mapper
      * @return
      */
-    protected boolean validateExists(String key, DBMapper mapper) {
+    protected boolean validateExists(String key, DBMapper mapper) throws DBMapperException {
         String table = mapper.getTable();
         String dbKey = mapper.getPropertyMap().get(key);
+        String val = params.get(key)[0];
+        String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + dbKey + "='" + val + "';";
 
         try{
-            String val = params.get(key)[0];
-            String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + dbKey + "='" + val + "';";
             Statement stmt = db.createStatement();
             ResultSet res = stmt.executeQuery(query);
             //First, da nur eine Zeile ausgelesen wird
@@ -196,8 +197,10 @@ public abstract class Validator {
                 return false;
             }
         } catch(SQLException e) {
-            errors.put(key, "Das Vorkommen des Wertes in der Datenbank konnte nicht validiert werden.");
-            return false;
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" +
+                    query);
+            //errors.put(key, "Das Vorkommen des Wertes in der Datenbank konnte nicht validiert werden.");
+            //return false;
         }
     }
 
@@ -206,12 +209,9 @@ public abstract class Validator {
      *
      * @param key
      * @return
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws DBMapperException
      */
-    protected boolean validateSelf(String key) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    protected boolean validateSelf(String key) throws DBMapperException {
         UserMapper mapper = MappersHelper.userMapper;
         long id = Long.parseLong(params.get(key)[0]);
         DBModel user = mapper.getById(id);
@@ -227,12 +227,9 @@ public abstract class Validator {
      *
      * @param key
      * @return
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws DBMapperException
      */
-    protected boolean validateNotSelf(String key) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    protected boolean validateNotSelf(String key) throws DBMapperException {
         UserMapper mapper = MappersHelper.userMapper;
         long id = Long.parseLong(params.get(key)[0]);
         DBModel user = mapper.getById(id);

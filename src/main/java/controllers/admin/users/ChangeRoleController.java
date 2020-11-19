@@ -1,10 +1,13 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.UserMapper;
 import models.User;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +35,7 @@ public class ChangeRoleController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         UserMapper mapper = MappersHelper.userMapper;
         try {
             User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")));
@@ -47,8 +50,13 @@ public class ChangeRoleController extends Controller {
 
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+        } catch (DBMapperException e) {
+            req.setAttribute("tpl", this.tpl);
+            req.setAttribute("message", e.getMessage());
+
+            ServletContext context = this.getServletContext();
+            RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
+            dispatcher.forward(req, resp);
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {

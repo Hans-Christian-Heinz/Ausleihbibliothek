@@ -1,6 +1,7 @@
 package controllers.books;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.UserHelp;
 import models.DBModel;
 import models.User;
@@ -22,7 +23,7 @@ public class BorrowedController extends Controller {
     }
 
     @Override
-    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException {
         HttpSession session = req.getSession();
         User user = UserHelp.getUser(session);
         paginationHelp(req, user.getRelCount("books"));

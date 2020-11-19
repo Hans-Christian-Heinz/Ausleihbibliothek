@@ -1,5 +1,6 @@
 package models.relationships;
 
+import exceptions.DBMapperException;
 import mappers.DBMapper;
 import models.DBModel;
 
@@ -15,7 +16,7 @@ public class BelongsTo extends Relationship {
     }
 
     @Override
-    public Object queryRelationship(DBModel owner) {
+    public Object queryRelationship(DBModel owner) throws DBMapperException {
         try {
             if (! ownerClass.isInstance(owner)) {
                 //todo exception
@@ -29,11 +30,7 @@ public class BelongsTo extends Relationship {
                 return mapper.getById(id.longValue());
             else
                 return null;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException | InstantiationException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

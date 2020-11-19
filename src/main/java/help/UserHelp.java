@@ -1,5 +1,6 @@
 package help;
 
+import exceptions.DBMapperException;
 import models.User;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +16,7 @@ public class UserHelp {
             try {
                 user = (User) MappersHelper.userMapper.getById(id.longValue());
             }
-            catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            catch (DBMapperException e) {
                 //todo
                 user = null;
             }
@@ -30,7 +31,7 @@ public class UserHelp {
             try {
                 user = (User) MappersHelper.userMapper.getById(id.longValue());
             }
-            catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            catch (DBMapperException e) {
                 //todo
                 user = null;
             }
