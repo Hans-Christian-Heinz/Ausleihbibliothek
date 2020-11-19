@@ -1,5 +1,6 @@
 package validators.books;
 
+import help.MappersHelper;
 import models.Book;
 import models.User;
 import validators.Validator;
@@ -17,7 +18,7 @@ public class AusleihValidator extends Validator {
     public boolean validate() {
         boolean valid = true;
 
-        valid = valid && validateExists("id", new Book());
+        valid = valid && validateExists("id", MappersHelper.bookMapper);
         try {
             valid = valid && (validateEqual("user_id", "0") || validateSelf("user_id"));
         } catch (InstantiationException e) {

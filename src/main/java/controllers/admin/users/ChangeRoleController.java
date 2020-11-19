@@ -14,6 +14,10 @@ import java.lang.reflect.InvocationTargetException;
 public class ChangeRoleController extends Controller {
     public ChangeRoleController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ADMIN;
     }
 

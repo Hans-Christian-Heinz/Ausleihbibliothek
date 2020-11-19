@@ -1,22 +1,23 @@
 package controllers.books;
 
-import Exceptions.HttpMethodNotAllowedException;
 import controllers.Controller;
 import help.MappersHelper;
-import mappers.BookMapper;
 import mappers.DBMapper;
 import models.DBModel;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public class BookController extends Controller {
     public BookController() {
-        berechtigung = Zugang.ANGEMELDET;
+        super();
         tpl = "books/index.jsp";
+    }
+
+    @Override
+    protected void initBerechtigung() {
+        berechtigung = Zugang.ANGEMELDET;
     }
 
     @Override

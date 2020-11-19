@@ -15,6 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 public class EditProfileController extends Controller {
     public EditProfileController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ANGEMELDET;
     }
 

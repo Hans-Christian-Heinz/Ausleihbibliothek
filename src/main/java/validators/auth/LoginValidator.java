@@ -1,5 +1,6 @@
 package validators.auth;
 
+import help.MappersHelper;
 import models.User;
 import validators.Validator;
 
@@ -18,7 +19,7 @@ public class LoginValidator extends Validator {
         valid = valid && validateRegex("username", "(?U)[\\p{L}\\p{M}\\s'-_.]+");
         valid = valid && validateRequired("password");
         valid = valid && validatePwd("password");
-        valid = valid && validateExists("username", new User());
+        valid = valid && validateExists("username", MappersHelper.userMapper);
 
         return valid;
     }

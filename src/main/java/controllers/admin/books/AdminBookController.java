@@ -17,8 +17,13 @@ import java.util.List;
 
 public class AdminBookController extends Controller {
     public AdminBookController() {
-        berechtigung = Zugang.ADMIN;
+        super();
         tpl = "admin/books/index.jsp";
+    }
+
+    @Override
+    protected void initBerechtigung() {
+        berechtigung = Zugang.ADMIN;
     }
 
     @Override

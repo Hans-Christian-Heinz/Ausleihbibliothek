@@ -1,5 +1,6 @@
 package validators.profile;
 
+import help.MappersHelper;
 import models.User;
 import validators.Validator;
 
@@ -22,7 +23,7 @@ public class EditProfileValidator extends Validator {
         valid = valid && validateRegex("name", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("vorname");
         valid = valid && validateRegex("vorname", "(?U)[\\p{L}\\p{M}\\s'-]+");
-        valid = valid && validateUnique("username", new User(), id);
+        valid = valid && validateUnique("username", MappersHelper.userMapper, id);
 
         if (! valid) {
             //Fehlermeldung wird verwendet, um das Formular (modales Fenster) unmittelbar anzuzeigen.

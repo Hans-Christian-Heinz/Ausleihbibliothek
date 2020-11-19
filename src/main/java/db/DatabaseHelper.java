@@ -3,7 +3,7 @@ package db;
 import java.sql.*;
 import java.util.Properties;
 
-public class DatabaseHelper {
+public final class DatabaseHelper {
     private static Connection db;
 
     /**

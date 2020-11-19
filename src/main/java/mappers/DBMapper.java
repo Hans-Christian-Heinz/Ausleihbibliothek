@@ -13,9 +13,9 @@ import java.sql.Statement;
 import java.util.*;
 
 public abstract class DBMapper {
-    private Class<? extends DBModel> modelClass;
-    private String table;
-    private Map<String, String> propertyMap;
+    private final Class<? extends DBModel> modelClass;
+    private final String table;
+    private final Map<String, String> propertyMap;
     private final Connection db;
 
     /**
@@ -46,7 +46,6 @@ public abstract class DBMapper {
      *
      * @return
      */
-
     protected abstract Map<String, String> stdPropertyMap();
 
     public Class<? extends DBModel> getModelClass() {

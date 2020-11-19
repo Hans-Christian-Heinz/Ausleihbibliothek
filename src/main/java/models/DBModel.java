@@ -14,8 +14,6 @@ public abstract class DBModel implements Serializable {
     public abstract void setId(BigInteger id);
     public abstract BigInteger getId();
     public abstract void setId(Integer id);
-    public abstract String getTable();
-    public abstract Map<String, String> getPropertyMap();
 
     private Object queryRelationship(String relName, int perPage, int currentPage) {
         Relationship rel = relationships.get(relName);

@@ -1,5 +1,6 @@
 package validators.admin.users;
 
+import help.MappersHelper;
 import models.User;
 import validators.Validator;
 
@@ -15,7 +16,7 @@ public class DeleteUserValidator extends Validator {
     public boolean validate() {
         boolean valid = true;
 
-        valid = valid && this.validateExists("id", new User());
+        valid = valid && this.validateExists("id", MappersHelper.userMapper);
         try {
             valid = valid && this.validateNotSelf("id");
         } catch (NoSuchMethodException e) {

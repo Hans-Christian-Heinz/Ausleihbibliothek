@@ -14,6 +14,10 @@ import java.io.IOException;
 public class LogoutController extends Controller {
     public LogoutController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ANGEMELDET;
     }
 

@@ -13,6 +13,10 @@ import java.math.BigInteger;
 public class DeleteUserController extends Controller {
     public DeleteUserController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ADMIN;
     }
 

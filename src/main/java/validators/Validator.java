@@ -1,8 +1,8 @@
 package validators;
 
-import Exceptions.HttpMethodNotAllowedException;
 import db.DatabaseHelper;
 import help.MappersHelper;
+import mappers.DBMapper;
 import mappers.UserMapper;
 import models.DBModel;
 import models.User;
@@ -30,7 +30,7 @@ public abstract class Validator {
         this.currentUser = currentUser;
     }
 
-    public abstract boolean validate() throws HttpMethodNotAllowedException;
+    public abstract boolean validate();
 
     protected boolean validateRegex(String key, String pattern) {
         String val = params.get(key)[0];
@@ -107,13 +107,13 @@ public abstract class Validator {
      * Überprüfe, ob der Wert für key in der Datenbank bereits vorliegt
      *
      * @param key
-     * @param model
+     * @param mapper
      * @param id
      * @return
      */
-    protected boolean validateUnique(String key, DBModel model, String id) {
-        String table = model.getTable();
-        String dbKey = model.getPropertyMap().get(key);
+    protected boolean validateUnique(String key, DBMapper mapper, String id) {
+        String table = mapper.getTable();
+        String dbKey = mapper.getPropertyMap().get(key);
 
         try{
             String val = params.get(key)[0];
@@ -168,12 +168,12 @@ public abstract class Validator {
      * Stelle sicher, dass ein übergebner Wert in der Datenbank existiert.
      *
      * @param key
-     * @param model
+     * @param mapper
      * @return
      */
-    protected boolean validateExists(String key, DBModel model) {
-        String table = model.getTable();
-        String dbKey = model.getPropertyMap().get(key);
+    protected boolean validateExists(String key, DBMapper mapper) {
+        String table = mapper.getTable();
+        String dbKey = mapper.getPropertyMap().get(key);
 
         try{
             String val = params.get(key)[0];

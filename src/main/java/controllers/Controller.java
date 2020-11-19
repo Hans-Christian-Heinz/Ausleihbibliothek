@@ -2,12 +2,10 @@ package controllers;
 
 import java.lang.reflect.*;
 
-import Exceptions.HttpMethodNotAllowedException;
 import db.DatabaseHelper;
 import help.CSRFHelper;
 import help.UserHelp;
 import models.User;
-import validators.FalseValidator;
 import validators.Validator;
 
 import javax.servlet.RequestDispatcher;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,14 +32,17 @@ public abstract class Controller extends HttpServlet {
         GAST,
         ANGEMELDET,
         ADMIN
-    };
+    }
 
     public Controller() {
         db = DatabaseHelper.getConnection();
-         if (db == null) {
+        if (db == null) {
             this.tpl = "errors/dbAccess.jsp";
         }
+         initBerechtigung();
     }
+
+    protected abstract void initBerechtigung();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,11 +56,11 @@ public abstract class Controller extends HttpServlet {
         );*/
 
         HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
         if (! istBerechtigt(session)) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
             return;
         }
-        UserHelp.refreshUser(session);
 
         //get the contextPath of the servlet
         req.setAttribute("contextPath", req.getContextPath());
@@ -101,6 +101,7 @@ public abstract class Controller extends HttpServlet {
         );*/
 
         HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
         if (! istBerechtigt(session)) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
             return;
@@ -117,8 +118,6 @@ public abstract class Controller extends HttpServlet {
             return;
         }
 
-        UserHelp.refreshUser(session);
-
         String redirect = (String) session.getAttribute("uri");
         if (redirect == null) {
             redirect = req.getRequestURI();
@@ -130,47 +129,43 @@ public abstract class Controller extends HttpServlet {
         req.setAttribute("contextPath", req.getContextPath());
 
         //if (istBerechtigt(req.getSession())) {
-            String classname = this.getClass().getCanonicalName();
-            String validatorname = classname.replaceFirst("controllers", "validators");
-            validatorname = validatorname.replaceAll("Controller", "Validator");
-            Validator validator;
-            try {
-                Constructor<Validator> constr = (Constructor<Validator>) Class.forName(validatorname).getDeclaredConstructors()[0];
-                validator = constr.newInstance(req.getParameterMap(), UserHelp.getUser(session));
+        String classname = this.getClass().getCanonicalName();
+        String validatorname = classname.replaceFirst("controllers", "validators");
+        validatorname = validatorname.replaceAll("Controller", "Validator");
+        Validator validator;
+        try {
+            Constructor<Validator> constr = (Constructor<Validator>) Class.forName(validatorname).getDeclaredConstructors()[0];
+            validator = constr.newInstance(req.getParameterMap(), UserHelp.getUser(session));
+        }
+        catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Kein Validator gefunden: POST-Request nicht erlaubt.");
+            return;
+        }
+
+        req.setAttribute("tpl", this.tpl);
+
+        if (validator.validate()) {
+            req.setAttribute("errors", new HashMap<>());
+            req.setAttribute("old", new HashMap<>());
+
+            this.handlePost(req, resp);
+        }
+        else {
+            session.setAttribute("errors", validator.getErrors());
+
+            Map<String, String> old = new HashMap<>();
+            Enumeration<String> names = req.getParameterNames();
+            while (names.hasMoreElements()) {
+                String key = names.nextElement();
+                old.put(key, req.getParameter(key));
             }
-            catch (Exception e) {
-                validator = new FalseValidator(req.getParameterMap(), UserHelp.getUser(session));
-            }
+            session.setAttribute("old", old);
 
-            req.setAttribute("tpl", this.tpl);
-
-            try {
-                if (validator.validate()) {
-                    req.setAttribute("errors", new HashMap<>());
-                    req.setAttribute("old", new HashMap<>());
-
-                    this.handlePost(req, resp);
-                }
-                else {
-                    session.setAttribute("errors", validator.getErrors());
-
-                    Map<String, String> old = new HashMap<>();
-                    Enumeration<String> names = req.getParameterNames();
-                    while (names.hasMoreElements()) {
-                        String key = names.nextElement();
-                        old.put(key, req.getParameter(key));
-                    }
-                    session.setAttribute("old", old);
-
-                    //redirect back
-                    //Stelle sicher, dass errors und old in der Session nicht verworfen werden
-                    session.setAttribute("keepErrors", true);
-                    resp.sendRedirect(redirect);
-                }
-            }
-            catch (HttpMethodNotAllowedException e) {
-                resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            }
+            //redirect back
+            //Stelle sicher, dass errors und old in der Session nicht verworfen werden
+            session.setAttribute("keepErrors", true);
+            resp.sendRedirect(redirect);
+        }
         /*}
         else {
             resp.sendRedirect(req.getContextPath() + "/home");

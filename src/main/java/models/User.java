@@ -30,16 +30,6 @@ public class User extends DBModel {
         return MappersHelper.userMapper;
     }
 
-    @Override
-    public String getTable() {
-        return MappersHelper.userMapper.getTable();
-    }
-
-    @Override
-    public Map<String, String> getPropertyMap() {
-        return MappersHelper.userMapper.getPropertyMap();
-    }
-
     public BigInteger getId() {
         return id;
     }

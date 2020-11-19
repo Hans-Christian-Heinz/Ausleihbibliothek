@@ -14,6 +14,10 @@ public class RegisterController extends Controller {
     public RegisterController() {
         super();
         tpl = "auth/register.jsp";
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.GAST;
     }
 

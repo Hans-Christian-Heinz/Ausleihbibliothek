@@ -1,5 +1,6 @@
 package validators.admin.books;
 
+import help.MappersHelper;
 import models.Book;
 import models.User;
 import validators.Validator;
@@ -14,7 +15,7 @@ public class DeleteBookValidator extends Validator {
     public boolean validate() {
         boolean valid = true;
 
-        valid = valid && this.validateExists("id", new Book());
+        valid = valid && this.validateExists("id", MappersHelper.bookMapper);
 
         return valid;
     }

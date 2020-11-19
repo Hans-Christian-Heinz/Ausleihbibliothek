@@ -1,5 +1,6 @@
 package validators.admin.users;
 
+import help.MappersHelper;
 import models.User;
 import validators.Validator;
 
@@ -15,7 +16,7 @@ public class ChangeRoleValidator extends Validator {
     public boolean validate() {
         boolean valid = true;
 
-        valid = valid && validateExists("id", new User());
+        valid = valid && validateExists("id", MappersHelper.userMapper);
         try {
             valid = valid && validateNotSelf("id");
         } catch (NoSuchMethodException e) {

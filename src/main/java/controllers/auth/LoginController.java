@@ -16,6 +16,10 @@ public class LoginController extends Controller {
     public LoginController() throws ClassNotFoundException, SQLException {
         super();
         tpl = "auth/login.jsp";
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.GAST;
     }
 

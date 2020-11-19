@@ -14,6 +14,10 @@ import java.math.BigInteger;
 public class DeleteBookController extends Controller {
     public DeleteBookController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ADMIN;
     }
 

@@ -21,6 +21,11 @@ import java.util.List;
 
 public class AusleihController extends Controller {
     public AusleihController() {
+        super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ANGEMELDET;
     }
 

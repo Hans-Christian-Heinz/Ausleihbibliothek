@@ -17,6 +17,10 @@ import java.util.Map;
 public class ChangePasswordController extends Controller {
     public ChangePasswordController() {
         super();
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ANGEMELDET;
     }
 

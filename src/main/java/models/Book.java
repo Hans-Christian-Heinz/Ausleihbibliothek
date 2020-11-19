@@ -28,16 +28,6 @@ public class Book extends DBModel {
     }
 
     @Override
-    public String getTable() {
-        return MappersHelper.bookMapper.getTable();
-    }
-
-    @Override
-    public Map<String, String> getPropertyMap() {
-        return MappersHelper.bookMapper.getPropertyMap();
-    }
-
-    @Override
     public void setId(BigInteger id) {
         this.id = id;
     }

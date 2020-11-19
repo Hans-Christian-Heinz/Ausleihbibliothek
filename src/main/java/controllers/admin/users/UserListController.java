@@ -1,22 +1,22 @@
 package controllers.admin.users;
 
-import Exceptions.HttpMethodNotAllowedException;
 import controllers.Controller;
 import help.MappersHelper;
 import mappers.UserMapper;
 import models.DBModel;
-import models.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public class UserListController extends Controller {
     public UserListController() {
         super();
         tpl = "admin/users/list.jsp";
+    }
+
+    @Override
+    protected void initBerechtigung() {
         berechtigung = Zugang.ADMIN;
     }
 

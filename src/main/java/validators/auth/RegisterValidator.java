@@ -1,5 +1,6 @@
 package validators.auth;
 
+import help.MappersHelper;
 import models.User;
 import validators.Validator;
 
@@ -22,7 +23,7 @@ public class RegisterValidator extends Validator {
         valid = valid && validateRegex("vorname", "(?U)[\\p{L}\\p{M}\\s'-]+");
         valid = valid && validateRequired("password");
         valid = valid && validateRequired("password_repeat");
-        valid = valid && validateUnique("username", new User(), null);
+        valid = valid && validateUnique("username", MappersHelper.userMapper, null);
         valid = valid && validatePwd("password");
         valid = valid && validatePwd("password_repeat");
         valid = valid && validateSame("password", "password_repeat");
