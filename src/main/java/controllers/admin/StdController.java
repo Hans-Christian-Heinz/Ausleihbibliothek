@@ -1,5 +1,6 @@
 package controllers.admin;
 
+import Exceptions.HttpMethodNotAllowedException;
 import controllers.Controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class StdController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         //do nothing
     }
 }

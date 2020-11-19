@@ -1,5 +1,6 @@
 package validators;
 
+import Exceptions.HttpMethodNotAllowedException;
 import models.User;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ public class FalseValidator extends Validator {
     }
 
     @Override
-    public boolean validate() {
-        return false;
+    public boolean validate() throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException("Die POST-Methode ist nicht erlaubt.");
     }
 }

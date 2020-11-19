@@ -1,6 +1,8 @@
 package controllers;
 
 import java.lang.reflect.*;
+
+import Exceptions.HttpMethodNotAllowedException;
 import db.DatabaseHelper;
 import help.CSRFHelper;
 import help.UserHelp;
@@ -142,27 +144,32 @@ public abstract class Controller extends HttpServlet {
 
             req.setAttribute("tpl", this.tpl);
 
-            if (validator.validate()) {
-                req.setAttribute("errors", new HashMap<>());
-                req.setAttribute("old", new HashMap<>());
+            try {
+                if (validator.validate()) {
+                    req.setAttribute("errors", new HashMap<>());
+                    req.setAttribute("old", new HashMap<>());
 
-                this.handlePost(req, resp);
-            }
-            else {
-                session.setAttribute("errors", validator.getErrors());
-
-                Map<String, String> old = new HashMap<>();
-                Enumeration<String> names = req.getParameterNames();
-                while (names.hasMoreElements()) {
-                    String key = names.nextElement();
-                    old.put(key, req.getParameter(key));
+                    this.handlePost(req, resp);
                 }
-                session.setAttribute("old", old);
+                else {
+                    session.setAttribute("errors", validator.getErrors());
 
-                //redirect back
-                //Stelle sicher, dass errors und old in der Session nicht verworfen werden
-                session.setAttribute("keepErrors", true);
-                resp.sendRedirect(redirect);
+                    Map<String, String> old = new HashMap<>();
+                    Enumeration<String> names = req.getParameterNames();
+                    while (names.hasMoreElements()) {
+                        String key = names.nextElement();
+                        old.put(key, req.getParameter(key));
+                    }
+                    session.setAttribute("old", old);
+
+                    //redirect back
+                    //Stelle sicher, dass errors und old in der Session nicht verworfen werden
+                    session.setAttribute("keepErrors", true);
+                    resp.sendRedirect(redirect);
+                }
+            }
+            catch (HttpMethodNotAllowedException e) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             }
         /*}
         else {

@@ -1,5 +1,6 @@
 package controllers.books;
 
+import Exceptions.HttpMethodNotAllowedException;
 import controllers.Controller;
 import help.UserHelp;
 import models.DBModel;
@@ -32,7 +33,7 @@ public class BorrowedController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         //do nothing
     }
 }

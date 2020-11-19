@@ -1,5 +1,6 @@
 package validators;
 
+import Exceptions.HttpMethodNotAllowedException;
 import db.DatabaseHelper;
 import help.MappersHelper;
 import mappers.UserMapper;
@@ -29,7 +30,7 @@ public abstract class Validator {
         this.currentUser = currentUser;
     }
 
-    public abstract boolean validate();
+    public abstract boolean validate() throws HttpMethodNotAllowedException;
 
     protected boolean validateRegex(String key, String pattern) {
         String val = params.get(key)[0];
