@@ -1,6 +1,7 @@
 package controllers.admin.books;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.BookMapper;
 import mappers.DBMapper;
@@ -27,7 +28,7 @@ public class AdminBookController extends Controller {
     }
 
     @Override
-    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
 
         paginationHelp(req, mapper.count());
@@ -40,25 +41,13 @@ public class AdminBookController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
         Book book = new Book();
         book.setAuthor(req.getParameter("author"));
         book.setName(req.getParameter("name"));
 
-        try {
-            mapper.insert(book);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        mapper.insert(book);
 
         //redirect back
         resp.sendRedirect((String) req.getAttribute("redirect"));

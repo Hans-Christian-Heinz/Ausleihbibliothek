@@ -1,6 +1,7 @@
 package controllers.profile;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import help.UserHelp;
 import mappers.UserMapper;
@@ -33,27 +34,16 @@ public class EditProfileController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         UserMapper mapper = MappersHelper.userMapper;
+        User user = UserHelp.getUser(req.getSession());
+        user.setName(req.getParameter("name"));
+        user.setUsername(req.getParameter("username"));
+        user.setVorname(req.getParameter("vorname"));
 
-        try {
-            User user = UserHelp.getUser(req.getSession());
-            user.setName(req.getParameter("name"));
-            user.setUsername(req.getParameter("username"));
-            user.setVorname(req.getParameter("vorname"));
+        mapper.update(user);
 
-            mapper.update(user);
-
-            //redirect back
-            resp.sendRedirect((String) req.getAttribute("redirect"));
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        //redirect back
+        resp.sendRedirect((String) req.getAttribute("redirect"));
     }
 }

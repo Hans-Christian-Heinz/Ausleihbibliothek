@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -180,6 +182,10 @@ public abstract class Controller extends HttpServlet {
 
             RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/layout.jsp");
             dispatcher.forward(req, resp);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            //todo
+            //exception while hashing pwd
+            e.printStackTrace();
         }
         /*}
         else {
@@ -218,7 +224,7 @@ public abstract class Controller extends HttpServlet {
         req.setAttribute("currentPage", currentPage);
     }
 
-    protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, DBMapperException;
+    protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, DBMapperException, InvalidKeySpecException, NoSuchAlgorithmException;
 
     private boolean istBerechtigt(HttpSession session) {
         User user = UserHelp.getUser(session);

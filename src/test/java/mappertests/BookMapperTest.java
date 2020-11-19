@@ -50,55 +50,63 @@ public class BookMapperTest {
 
     @Test
     void getAll() {
-        List<DBModel> liste = mapper.getAll();
-        assertEquals(3, liste.size());
+        try {
+            List<DBModel> liste = mapper.getAll();
+            assertEquals(3, liste.size());
 
-        Book b1 = new Book();
-        b1.setName("Dune");
-        b1.setAuthor("Frank Herbert");
-        b1.setId(BigInteger.valueOf(1));
-        Book b2 = new Book();
-        b2.setName("Rote Ernte");
-        b2.setAuthor("Eric Ambler");
-        b2.setAusgeliehenVon(BigInteger.valueOf(2));
-        b2.setId(BigInteger.valueOf(2));
-        Book b3 = new Book();
-        b3.setName("Die Libelle");
-        b3.setAuthor("John le Carre");
-        b3.setAusgeliehenVon(BigInteger.valueOf(2));
-        b3.setId(BigInteger.valueOf(3));
+            Book b1 = new Book();
+            b1.setName("Dune");
+            b1.setAuthor("Frank Herbert");
+            b1.setId(BigInteger.valueOf(1));
+            Book b2 = new Book();
+            b2.setName("Rote Ernte");
+            b2.setAuthor("Eric Ambler");
+            b2.setAusgeliehenVon(BigInteger.valueOf(2));
+            b2.setId(BigInteger.valueOf(2));
+            Book b3 = new Book();
+            b3.setName("Die Libelle");
+            b3.setAuthor("John le Carre");
+            b3.setAusgeliehenVon(BigInteger.valueOf(2));
+            b3.setId(BigInteger.valueOf(3));
 
-        for (DBModel model : liste) {
-            assertTrue(model instanceof Book);
-            if (model.getId().equals(BigInteger.valueOf(2))) {
-                assertEquals(model, b2);
+            for (DBModel model : liste) {
+                assertTrue(model instanceof Book);
+                if (model.getId().equals(BigInteger.valueOf(2))) {
+                    assertEquals(model, b2);
+                }
+                else if(model.getId().equals(BigInteger.valueOf(1))) {
+                    assertEquals(model, b1);
+                }
+                else {
+                    assertEquals(model, b3);
+                }
             }
-            else if(model.getId().equals(BigInteger.valueOf(1))) {
-                assertEquals(model, b1);
-            }
-            else {
-                assertEquals(model, b3);
-            }
+        } catch (DBMapperException e) {
+            e.printStackTrace();
         }
     }
 
     @Test
     void getAllWhereIndex() {
-        Book b2 = new Book();
-        b2.setName("Rote Ernte");
-        b2.setAuthor("Eric Ambler");
-        b2.setAusgeliehenVon(BigInteger.valueOf(2));
-        b2.setId(BigInteger.valueOf(2));
-        Book b3 = new Book();
-        b3.setName("Die Libelle");
-        b3.setAuthor("John le Carre");
-        b3.setAusgeliehenVon(BigInteger.valueOf(2));
-        b3.setId(BigInteger.valueOf(3));
+        try {
+            Book b2 = new Book();
+            b2.setName("Rote Ernte");
+            b2.setAuthor("Eric Ambler");
+            b2.setAusgeliehenVon(BigInteger.valueOf(2));
+            b2.setId(BigInteger.valueOf(2));
+            Book b3 = new Book();
+            b3.setName("Die Libelle");
+            b3.setAuthor("John le Carre");
+            b3.setAusgeliehenVon(BigInteger.valueOf(2));
+            b3.setId(BigInteger.valueOf(3));
 
-        List<DBModel> liste = mapper.getAllWhereIndex("ausgeliehenVon", "2");
-        assertEquals(2, liste.size());
-        assertEquals(b2, liste.get(0));
-        assertEquals(b3, liste.get(1));
+            List<DBModel> liste = mapper.getAllWhereIndex("ausgeliehenVon", "2");
+            assertEquals(2, liste.size());
+            assertEquals(b2, liste.get(0));
+            assertEquals(b3, liste.get(1));
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -109,10 +117,6 @@ public class BookMapperTest {
 
         try {
             mapper.insert(book);
-        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | SQLException e) {
-            e.printStackTrace();
-        }
-        try {
             assertEquals(mapper.getById(4), book);
         } catch (DBMapperException e) {
             e.printStackTrace();
@@ -121,19 +125,10 @@ public class BookMapperTest {
 
     @Test
     void update() {
-        Book book = null;
         try {
-            book = (Book) mapper.getById(2);
-        } catch (DBMapperException e) {
-            e.printStackTrace();
-        }
-        book.setAuthor("Dashiell Hammit");
-        try {
+            Book book = (Book) mapper.getById(2);
+            book.setAuthor("Dashiell Hammit");
             mapper.update(book);
-        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        try {
             assertEquals(book, mapper.getById(2));
         } catch (DBMapperException e) {
             e.printStackTrace();
@@ -142,19 +137,23 @@ public class BookMapperTest {
 
     @Test
     void delete() {
-        mapper.delete(BigInteger.valueOf(1));
-        List<DBModel> liste = mapper.getAll();
-        assertEquals(2, liste.size());
-        Book b2 = new Book();
-        b2.setAuthor("Eric Ambler");
-        b2.setName("Rote Ernte");
-        b2.setId(BigInteger.valueOf(2));
-        b2.setAusgeliehenVon(BigInteger.valueOf(2));
-        Book b3 = new Book();
-        b3.setAuthor("John le Carre");
-        b3.setName("Die Libelle");
-        b3.setId(BigInteger.valueOf(3));
-        b3.setAusgeliehenVon(BigInteger.valueOf(2));
-        assertEquals(b3, liste.get(1));
+        try {
+            mapper.delete(BigInteger.valueOf(1));
+            List<DBModel> liste = mapper.getAll();
+            assertEquals(2, liste.size());
+            Book b2 = new Book();
+            b2.setAuthor("Eric Ambler");
+            b2.setName("Rote Ernte");
+            b2.setId(BigInteger.valueOf(2));
+            b2.setAusgeliehenVon(BigInteger.valueOf(2));
+            Book b3 = new Book();
+            b3.setAuthor("John le Carre");
+            b3.setName("Die Libelle");
+            b3.setId(BigInteger.valueOf(3));
+            b3.setAusgeliehenVon(BigInteger.valueOf(2));
+            assertEquals(b3, liste.get(1));
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.UserMapper;
 import models.DBModel;
@@ -21,7 +22,7 @@ public class UserListController extends Controller {
     }
 
     @Override
-    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException {
         UserMapper mapper = MappersHelper.userMapper;
 
         paginationHelp(req, mapper.count());

@@ -67,47 +67,55 @@ public class UserMapperTest {
 
     @Test
     void getAll() {
-        List<DBModel> liste = mapper.getAll();
-        assertEquals(2, liste.size());
+        try {
+            List<DBModel> liste = mapper.getAll();
+            assertEquals(2, liste.size());
 
-        User u1 = new User();
-        u1.setVorname("Max");
-        u1.setName("Mustermann");
-        u1.setUsername("m.mustermann");
-        u1.setPassword("pwd");
-        u1.setId(BigInteger.valueOf(1));
-        User u2 = new User();
-        u2.setVorname("Erika");
-        u2.setName("Mustermann");
-        u2.setUsername("e.mustermann");
-        u2.setPassword("pwd");
-        u2.setRole("admin");
-        u2.setId(BigInteger.valueOf(2));
+            User u1 = new User();
+            u1.setVorname("Max");
+            u1.setName("Mustermann");
+            u1.setUsername("m.mustermann");
+            u1.setPassword("pwd");
+            u1.setId(BigInteger.valueOf(1));
+            User u2 = new User();
+            u2.setVorname("Erika");
+            u2.setName("Mustermann");
+            u2.setUsername("e.mustermann");
+            u2.setPassword("pwd");
+            u2.setRole("admin");
+            u2.setId(BigInteger.valueOf(2));
 
-        for (DBModel model : liste) {
-            assertTrue(model instanceof User);
-            if (model.getId().equals(BigInteger.valueOf(2))) {
-                assertEquals(model, u2);
+            for (DBModel model : liste) {
+                assertTrue(model instanceof User);
+                if (model.getId().equals(BigInteger.valueOf(2))) {
+                    assertEquals(model, u2);
+                }
+                else {
+                    assertEquals(model, u1);
+                }
             }
-            else {
-                assertEquals(model, u1);
-            }
+        } catch (DBMapperException e) {
+            e.printStackTrace();
         }
     }
 
     @Test
     void getAllWhereIndex() {
-        User u2 = new User();
-        u2.setVorname("Erika");
-        u2.setName("Mustermann");
-        u2.setUsername("e.mustermann");
-        u2.setPassword("pwd");
-        u2.setRole("admin");
-        u2.setId(BigInteger.valueOf(2));
+        try {
+            User u2 = new User();
+            u2.setVorname("Erika");
+            u2.setName("Mustermann");
+            u2.setUsername("e.mustermann");
+            u2.setPassword("pwd");
+            u2.setRole("admin");
+            u2.setId(BigInteger.valueOf(2));
 
-        List<DBModel> liste = mapper.getAllWhereIndex("username", "e.mustermann");
-        assertEquals(1, liste.size());
-        assertEquals(u2, liste.get(0));
+            List<DBModel> liste = mapper.getAllWhereIndex("username", "e.mustermann");
+            assertEquals(1, liste.size());
+            assertEquals(u2, liste.get(0));
+        } catch(DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -121,10 +129,6 @@ public class UserMapperTest {
 
         try {
             mapper.insert(user);
-        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | SQLException e) {
-            e.printStackTrace();
-        }
-        try {
             assertEquals(mapper.getById(3), user);
         } catch (DBMapperException e) {
             e.printStackTrace();
@@ -139,23 +143,27 @@ public class UserMapperTest {
             user.setVorname("Maximilian");
             mapper.update(user);
             assertEquals(user, mapper.getById(1));
-        } catch (DBMapperException | NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        } catch (DBMapperException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     void delete() {
-        mapper.delete(BigInteger.valueOf(1));
-        List<DBModel> liste = mapper.getAll();
-        assertEquals(1, liste.size());
-        User u2 = new User();
-        u2.setVorname("Erika");
-        u2.setName("Mustermann");
-        u2.setUsername("e.mustermann");
-        u2.setPassword("pwd");
-        u2.setRole("admin");
-        u2.setId(BigInteger.valueOf(2));
-        assertEquals(u2, liste.get(0));
+        try {
+            mapper.delete(BigInteger.valueOf(1));
+            List<DBModel> liste = mapper.getAll();
+            assertEquals(1, liste.size());
+            User u2 = new User();
+            u2.setVorname("Erika");
+            u2.setName("Mustermann");
+            u2.setUsername("e.mustermann");
+            u2.setPassword("pwd");
+            u2.setRole("admin");
+            u2.setId(BigInteger.valueOf(2));
+            assertEquals(u2, liste.get(0));
+        } catch (DBMapperException e) {
+            e.printStackTrace();
+        }
     }
 }

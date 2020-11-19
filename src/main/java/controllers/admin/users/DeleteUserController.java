@@ -1,6 +1,7 @@
 package controllers.admin.users;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.UserMapper;
 
@@ -31,7 +32,7 @@ public class DeleteUserController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         long id = Long.parseLong(req.getParameter("id"));
         UserMapper mapper = MappersHelper.userMapper;
         mapper.delete(BigInteger.valueOf(id));

@@ -131,7 +131,7 @@ public abstract class DBMapper {
      *
      * @return
      */
-    public List<DBModel> getAll() {
+    public List<DBModel> getAll() throws DBMapperException {
         return getAllWhereIndex(null, null);
     }
 
@@ -142,7 +142,7 @@ public abstract class DBMapper {
      * @param currentPage starts with 0
      * @return list of items to be displayed
      */
-    public List<DBModel> getPagination(int perPage, int currentPage) {
+    public List<DBModel> getPagination(int perPage, int currentPage) throws DBMapperException {
         if (perPage < 0 || currentPage < 0) {
             return getAll();
         }
@@ -153,7 +153,7 @@ public abstract class DBMapper {
         return executeSelect(query.toString());
     }
 
-    public List<DBModel> getPaginationWhereIndex(String index, String val, int perPage, int currentPage) {
+    public List<DBModel> getPaginationWhereIndex(String index, String val, int perPage, int currentPage) throws DBMapperException {
         StringBuilder query = this.getSelectHelp();
         if (index != null) {
             query.append(" WHERE " + propertyMap.get(index) + "=");
@@ -174,7 +174,7 @@ public abstract class DBMapper {
      *
      * @return
      */
-    public int count() {
+    public int count() throws DBMapperException {
         String query = "SELECT COUNT(id) AS anzahl FROM " + table + ";";
 
         try {
@@ -189,13 +189,11 @@ public abstract class DBMapper {
                 return 0;
             }
         } catch(SQLException e) {
-            //TODO
-            e.printStackTrace();
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query);
         }
-        return 0;
     }
 
-    public int countWhereIndex(String index, String val) {
+    public int countWhereIndex(String index, String val) throws DBMapperException {
         String query = "SELECT COUNT(id) AS anzahl FROM " + table + " WHERE " + propertyMap.get(index) + "=" + val + ";";
 
         try {
@@ -210,10 +208,8 @@ public abstract class DBMapper {
                 return 0;
             }
         } catch(SQLException e) {
-            //TODO
-            e.printStackTrace();
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query);
         }
-        return 0;
     }
 
     /**
@@ -223,7 +219,7 @@ public abstract class DBMapper {
      * @param val
      * @return
      */
-    public List<DBModel> getAllWhereIndex(String index, String val) {
+    public List<DBModel> getAllWhereIndex(String index, String val) throws DBMapperException {
         StringBuilder query = this.getSelectHelp();
         if (index != null) {
             query.append(" WHERE " + propertyMap.get(index) + "=");
@@ -244,9 +240,10 @@ public abstract class DBMapper {
      *
      * @param model
      */
-    public void insert(DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, SQLException {
+    public void insert(DBModel model) throws DBMapperException {
         if (! modelClass.isInstance(model)) {
-            //TODO exception
+            throw new DBMapperException("Beim Versuch, eine Instanz von " + model.getClass().getCanonicalName() +
+                    " mithilfe einer Instanz von " + this.getClass().getCanonicalName() + " zu speichern, ist ein Fehler aufgetreten.");
         }
         Set<String> keySet = propertyMap.keySet();
 
@@ -257,19 +254,24 @@ public abstract class DBMapper {
         while (keyIt.hasNext()) {
             String key = keyIt.next();
             if (! key.equals("id")) {
-                Method getter =
-                        modelClass.getDeclaredMethod("get" + key.substring(0, 1).toUpperCase() + key.substring(1));
-                Object value = getter.invoke(model);
-                query.append(propertyMap.get(key));
-                if (value != null) {
-                    values.append("'").append(value.toString()).append("'");
-                }
-                else {
-                    values.append("NULL");
-                }
-                if (keyIt.hasNext()) {
-                    query.append(",");
-                    values.append(", ");
+                String methodName = "get" + key.substring(0, 1).toUpperCase() + key.substring(1);
+                try {
+                    Method getter = modelClass.getDeclaredMethod(methodName);
+                    Object value = getter.invoke(model);
+                    query.append(propertyMap.get(key));
+                    if (value != null) {
+                        values.append("'").append(value.toString()).append("'");
+                    }
+                    else {
+                        values.append("NULL");
+                    }
+                    if (keyIt.hasNext()) {
+                        query.append(",");
+                        values.append(", ");
+                    }
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    throw new DBMapperException("Methode " + methodName + " konnte auf einer Instanz von "
+                            + modelClass.getCanonicalName() + " nicht aufgerufen werden.");
                 }
             }
         }
@@ -277,26 +279,28 @@ public abstract class DBMapper {
         query.append(values);
         query.append(");");
 
-        Statement stmt = db.createStatement();
         try {
-            stmt.execute(query.toString(), Statement.RETURN_GENERATED_KEYS);
-            ResultSet res = stmt.getGeneratedKeys();
-            //First, nur eine Zeile eingefügt wurde
-            if (res.first()) {
-                model.setId(BigInteger.valueOf(res.getLong("id")));
+            Statement stmt = db.createStatement();
+            //verschachteltes try catch: beim Testen wird sqlite verwendet und mit RETURN_GENERATED_KEYS wird eine Methode ausgelöst
+            try {
+                stmt.execute(query.toString(), Statement.RETURN_GENERATED_KEYS);
+                ResultSet res = stmt.getGeneratedKeys();
+                //First, nur eine Zeile eingefügt wurde
+                if (res.first()) {
+                    model.setId(BigInteger.valueOf(res.getLong("id")));
+                }
+            } catch(SQLException e) {
+                stmt.execute(query.toString());
+                //Suche die maximale id; (RETURN_GENERATED_KEYS für sqlite (TestDB) nicht implementiert
+                String q = "SELECT MAX(id) as m FROM " + table + ";";
+                Statement s = db.createStatement();
+                ResultSet r = s.executeQuery(q);
+                if (r.next()) {
+                    model.setId(BigInteger.valueOf(r.getLong("m")));
+                }
             }
-            else {
-
-            }
-        } catch(SQLException e) {
-            stmt.execute(query.toString());
-            //Suche die maximale id; (RETURN_GENERATED_KEYS für sqlite (TestDB) nicht implementiert
-            String q = "SELECT MAX(id) as m FROM " + table + ";";
-            Statement s = db.createStatement();
-            ResultSet r = s.executeQuery(q);
-            if (r.next()) {
-                model.setId(BigInteger.valueOf(r.getLong("m")));
-            }
+        } catch (SQLException throwables) {
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query.toString());
         }
     }
 
@@ -305,7 +309,7 @@ public abstract class DBMapper {
      *
      * @param model
      */
-    public void update(DBModel model) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void update(DBModel model) throws DBMapperException {
         Set<String> keySet = propertyMap.keySet();
 
         //Baue die Datenbankabfrage auf: Lese alle Spalten, die in der PropertyMap vorhanden sind aus.
@@ -314,17 +318,22 @@ public abstract class DBMapper {
         while (keyIt.hasNext()) {
             String key = keyIt.next();
             if (! key.equals("id")) {
-                Method getter =
-                        modelClass.getDeclaredMethod("get" + key.substring(0, 1).toUpperCase() + key.substring(1));
-                Object value = getter.invoke(model);
-                if (value == null) {
-                    query.append(propertyMap.get(key)).append("=NULL");
-                }
-                else {
-                    query.append(propertyMap.get(key)).append("='").append(value.toString()).append("'");
-                }
-                if (keyIt.hasNext()) {
-                    query.append(", ");
+                String methodName = "get" + key.substring(0, 1).toUpperCase() + key.substring(1);
+                try {
+                    Method getter = modelClass.getDeclaredMethod(methodName);
+                    Object value = getter.invoke(model);
+                    if (value == null) {
+                        query.append(propertyMap.get(key)).append("=NULL");
+                    }
+                    else {
+                        query.append(propertyMap.get(key)).append("='").append(value.toString()).append("'");
+                    }
+                    if (keyIt.hasNext()) {
+                        query.append(", ");
+                    }
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    throw new DBMapperException("Methode " + methodName + " konnte auf einer Instanz von "
+                            + modelClass.getCanonicalName() + " nicht aufgerufen werden.");
                 }
             }
         }
@@ -334,7 +343,7 @@ public abstract class DBMapper {
             Statement stmt = db.createStatement();
             stmt.execute(query.toString());
         } catch(SQLException e) {
-            //TODO
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query.toString());
         }
     }
 
@@ -344,13 +353,13 @@ public abstract class DBMapper {
      * @param id
      * @return
      */
-    public void delete(BigInteger id) {
+    public void delete(BigInteger id) throws DBMapperException {
         String query = "DELETE FROM " + table + " WHERE id=" + id + ";";
         try {
             Statement stmt = db.createStatement();
             stmt.execute(query);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query);
         }
     }
 
@@ -372,7 +381,7 @@ public abstract class DBMapper {
         return query;
     }
 
-    private List<DBModel> executeSelect(String query) {
+    private List<DBModel> executeSelect(String query) throws DBMapperException {
         List<DBModel> erg = new ArrayList<>();
         Set<String> keySet = propertyMap.keySet();
 
@@ -381,7 +390,12 @@ public abstract class DBMapper {
             ResultSet res = stmt.executeQuery(query.toString());
             //First, da bei id-Suche nur eine Zeile ausgelesen wird
             while (res.next()) {
-                DBModel model = modelClass.getConstructor().newInstance();
+                DBModel model;
+                try {
+                    model = modelClass.getConstructor().newInstance();
+                } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+                    throw new DBMapperException("Klasse " + modelClass.getCanonicalName() + " konnte nicht instanziiert werden.");
+                }
                 for (String key : keySet) {
                     //Benutze reflection, um Setter aufzurufen
                     //Field feld = modelClass.getDeclaredField(key);
@@ -389,23 +403,23 @@ public abstract class DBMapper {
                     if (value != null) {
                         //Method setter =
                         //      modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), feld.getType());
-                        Method setter =
-                                modelClass.getDeclaredMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1), value.getClass());
-                        setter.invoke(model, value);
+                        String methodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
+                        try {
+                            Method setter =
+                                    modelClass.getDeclaredMethod(methodName, value.getClass());
+                            setter.invoke(model, value);
+                        }
+                        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                            throw new DBMapperException("Methode " + methodName + " konnte auf einer Instanz von "
+                                    + modelClass.getCanonicalName() + " nicht aufgerufen werden.");
+                        }
                     }
                 }
 
                 erg.add(model);
             }
-        } catch(SQLException | NoSuchMethodException e) {
-            //TODO
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch(SQLException e) {
+            throw new DBMapperException("Bei der folgenden Datenbankanfrage ist ein Fehler aufgetreten:\n" + query);
         }
 
         return erg;

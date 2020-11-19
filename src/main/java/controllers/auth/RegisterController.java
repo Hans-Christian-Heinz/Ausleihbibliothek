@@ -1,14 +1,18 @@
 package controllers.auth;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import help.PasswordNew;
+import mappers.DBMapper;
 import mappers.UserMapper;
 import models.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public class RegisterController extends Controller {
     public RegisterController() {
@@ -27,10 +31,9 @@ public class RegisterController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMapper mapper = MappersHelper.userMapper;
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException, InvalidKeySpecException, NoSuchAlgorithmException {
+        DBMapper mapper = MappersHelper.userMapper;
         //Validierung geschieht schon in der Elternklasse
-        try {
             User user = new User();
             user.setVorname(req.getParameter("vorname"));
             user.setUsername(req.getParameter("username"));
@@ -42,8 +45,6 @@ public class RegisterController extends Controller {
 
             req.getSession().setAttribute("user_id", user.getId());
             resp.sendRedirect(req.getContextPath() + "/home");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }

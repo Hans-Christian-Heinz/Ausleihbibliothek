@@ -1,6 +1,7 @@
 package controllers.books;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.DBMapper;
 import models.DBModel;
@@ -21,7 +22,7 @@ public class BookController extends Controller {
     }
 
     @Override
-    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void handleGet(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
 
         paginationHelp(req, mapper.count());

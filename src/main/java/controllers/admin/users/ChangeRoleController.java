@@ -35,36 +35,20 @@ public class ChangeRoleController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         UserMapper mapper = MappersHelper.userMapper;
-        try {
-            User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")));
-            if (user.getRole() == null) {
-                user.setRole("admin");
-            }
-            else {
-                user.setRole(null);
-            }
-
-            mapper.update(user);
-
-            //redirect back
-            resp.sendRedirect((String) req.getAttribute("redirect"));
-        } catch (DBMapperException e) {
-            req.setAttribute("tpl", this.tpl);
-            req.setAttribute("message", e.getMessage());
-
-            ServletContext context = this.getServletContext();
-            RequestDispatcher dispatcher = context.getRequestDispatcher("/layout.jsp");
-            dispatcher.forward(req, resp);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        User user = (User) mapper.getById(Long.parseLong(req.getParameter("id")));
+        if (user.getRole() == null) {
+            user.setRole("admin");
         }
+        else {
+            user.setRole(null);
+        }
+
+        mapper.update(user);
+
+        //redirect back
+        resp.sendRedirect((String) req.getAttribute("redirect"));
+
     }
 }

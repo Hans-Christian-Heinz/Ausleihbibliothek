@@ -1,5 +1,6 @@
 package models.relationships;
 
+import exceptions.DBMapperException;
 import mappers.DBMapper;
 import models.DBModel;
 
@@ -16,11 +17,11 @@ public class HasMany extends Relationship {
     }
 
     @Override
-    public Object queryRelationship(DBModel owner) {
+    public Object queryRelationship(DBModel owner) throws DBMapperException {
         return queryRelationship(owner, -1, -1);
     }
 
-    public List<DBModel> queryRelationship(DBModel owner, int perPage, int currentPage) {
+    public List<DBModel> queryRelationship(DBModel owner, int perPage, int currentPage) throws DBMapperException {
         if (! ownerClass.isInstance(owner)) {
             //todo exception
         }
@@ -35,24 +36,22 @@ public class HasMany extends Relationship {
             else {
                 return mapper.getPaginationWhereIndex(otherFk, id.toString(), perPage, currentPage);
             }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            //todo
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public int count(DBModel owner) {
+    public int count(DBModel owner) throws DBMapperException {
         try {
             Method getMapper = otherClass.getDeclaredMethod("getMapper");
             DBMapper mapper = (DBMapper) getMapper.invoke(otherClass);
 
             return mapper.countWhereIndex(otherFk, owner.getId().toString());
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            //todo
             e.printStackTrace();
         }
         return 0;

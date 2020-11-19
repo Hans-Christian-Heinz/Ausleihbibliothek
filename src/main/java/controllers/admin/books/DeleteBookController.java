@@ -1,6 +1,7 @@
 package controllers.admin.books;
 
 import controllers.Controller;
+import exceptions.DBMapperException;
 import help.MappersHelper;
 import mappers.BookMapper;
 import mappers.DBMapper;
@@ -32,7 +33,7 @@ public class DeleteBookController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
         long id = Long.parseLong(req.getParameter("id"));
         mapper.delete(BigInteger.valueOf(id));

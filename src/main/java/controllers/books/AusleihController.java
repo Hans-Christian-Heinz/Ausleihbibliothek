@@ -45,23 +45,19 @@ public class AusleihController extends Controller {
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
         DBMapper mapper = MappersHelper.bookMapper;
-        try {
-            User user = UserHelp.getUser(req.getSession());
-            Book book = (Book) mapper.getById(Long.parseLong(req.getParameter("id")));
+        User user = UserHelp.getUser(req.getSession());
+        Book book = (Book) mapper.getById(Long.parseLong(req.getParameter("id")));
 
-            if (book.getAusgeliehenVon() == null) {
-                book.setAusgeliehenVon(user.getId());
-            }
-            else {
-                book.setAusgeliehenVon((BigInteger) null);
-            }
-
-            mapper.update(book);
-
-            //redirect back
-            resp.sendRedirect((String) req.getAttribute("redirect"));
-        } catch (InvocationTargetException | NoSuchFieldException | NoSuchMethodException | IllegalAccessException e) {
-            e.printStackTrace();
+        if (book.getAusgeliehenVon() == null) {
+            book.setAusgeliehenVon(user.getId());
         }
+        else {
+            book.setAusgeliehenVon((BigInteger) null);
+        }
+
+        mapper.update(book);
+
+        //redirect back
+        resp.sendRedirect((String) req.getAttribute("redirect"));
     }
 }
