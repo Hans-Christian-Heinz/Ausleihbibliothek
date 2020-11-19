@@ -23,7 +23,8 @@ public class LogoutController extends Controller {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //do nothing
+        //get not implemented
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 
     @Override

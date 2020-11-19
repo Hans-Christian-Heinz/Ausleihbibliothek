@@ -33,8 +33,9 @@ public class AusleihController extends Controller {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        //do nothing
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        //get not implemented
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 
     @Override
