@@ -23,7 +23,7 @@
             </div>
             <div class="modal-body">
                 <p class="text-justify">
-                    Sind Sie sicher, dass sie das Benutzerprofil von <%= Encode.forHtml(request.getParameter("fullName")) %> löschen möchten?
+                    Sind Sie sicher, dass Sie das Benutzerprofil von <%= Encode.forHtml(request.getParameter("fullName")) %> löschen möchten?
                 </p>
             </div>
             <div class="modal-footer">

@@ -83,6 +83,16 @@
         <url-pattern>/profile/pwd</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>delete-self-controller</servlet-name>
+        <servlet-class>
+            controllers.profile.DeleteSelfController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-self-controller</servlet-name>
+        <url-pattern>/profile/delete</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>book-controller</servlet-name>
         <servlet-class>
             controllers.books.BookController

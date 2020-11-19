@@ -65,6 +65,8 @@
                             <a class="dropdown-item" data-toggle="modal" href="#editProfileModal">Profil bearbeiten</a>
                             <a class="dropdown-item" data-toggle="modal" href="#changePwdModal">Passwort ändern</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" data-toggle="modal" href="#deleteSelfModal">Profil löschen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="<%= prefix %>/logout"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Abmelden</a>
                             <form id="logout-form" action="<%= prefix %>/logout" method="POST" class="d-none">
@@ -81,4 +83,5 @@
 <% if(user != null) { %>
     <jsp:include page="modals/editProfile.jsp"/>
     <jsp:include page="modals/changePassword.jsp"/>
+    <jsp:include page="modals/deleteSelf.jsp"/>
 <% } %>
