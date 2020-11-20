@@ -1,6 +1,7 @@
 package controllers.admin;
 
 import controllers.Controller;
+import exceptions.HttpMethodNotAllowedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,5 +25,10 @@ public class StdController extends Controller {
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         //do nothing
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

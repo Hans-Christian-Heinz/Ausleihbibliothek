@@ -1,6 +1,7 @@
 package controllers.auth;
 
 import controllers.Controller;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import help.PasswordNew;
 import mappers.UserMapper;
@@ -51,5 +52,10 @@ public class LoginController extends Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

@@ -2,6 +2,7 @@ package controllers.books;
 
 import controllers.Controller;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import help.UserHelp;
 import mappers.BookMapper;
@@ -60,5 +61,10 @@ public class AusleihController extends Controller {
 
         //redirect back
         resp.sendRedirect((String) req.getAttribute("redirect"));
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

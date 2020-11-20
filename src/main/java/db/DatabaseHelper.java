@@ -36,7 +36,7 @@ public final class DatabaseHelper {
     /**
      * different database for JUnit
      *
-     * @return
+     * @return is a JUnit test running?
      */
     private static boolean isJUnitTest() {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {

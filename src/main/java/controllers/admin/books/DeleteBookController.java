@@ -2,6 +2,7 @@ package controllers.admin.books;
 
 import controllers.Controller;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import mappers.BookMapper;
 import mappers.DBMapper;
@@ -41,5 +42,10 @@ public class DeleteBookController extends Controller {
 
         //redirect back
         resp.sendRedirect((String) req.getAttribute("redirect"));
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

@@ -2,6 +2,7 @@ package controllers.admin.users;
 
 import controllers.Controller;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import mappers.UserMapper;
 import models.User;
@@ -50,6 +51,10 @@ public class ChangeRoleController extends Controller {
 
         //redirect back
         resp.sendRedirect((String) req.getAttribute("redirect"));
+    }
 
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

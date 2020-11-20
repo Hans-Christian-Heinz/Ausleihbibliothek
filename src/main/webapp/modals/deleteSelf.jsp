@@ -35,10 +35,10 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
-                <form class="form" action="<%= prefix %>/profile/delete" method="POST">
-                    <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
-                    <button type="submit" class="btn btn-danger">Benutzerprofil löschen</button>
-                </form>
+                <!-- Im Skript delete.js wird eine delete-request gesendet -->
+                <a type="button" data-prefix="<%= prefix %>" data-redirect="/home" href="/profile/delete" class="btn btn-danger" id="deleteSelf">
+                    Benutzerprofil löschen DELETE
+                </a>
             </div>
         </div>
     </div>

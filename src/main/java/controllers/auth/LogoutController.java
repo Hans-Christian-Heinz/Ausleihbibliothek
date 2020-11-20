@@ -1,6 +1,7 @@
 package controllers.auth;
 
 import controllers.Controller;
+import exceptions.HttpMethodNotAllowedException;
 import help.UserHelp;
 
 import javax.servlet.RequestDispatcher;
@@ -36,5 +37,10 @@ public class LogoutController extends Controller {
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().invalidate();
         resp.sendRedirect(req.getContextPath() + "/home");
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

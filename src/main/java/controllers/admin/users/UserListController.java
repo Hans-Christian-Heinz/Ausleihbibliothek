@@ -2,6 +2,7 @@ package controllers.admin.users;
 
 import controllers.Controller;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import mappers.UserMapper;
 import models.DBModel;
@@ -37,5 +38,10 @@ public class UserListController extends Controller {
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         //do nothing
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

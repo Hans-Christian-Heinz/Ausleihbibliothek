@@ -2,6 +2,7 @@ package controllers.auth;
 
 import controllers.Controller;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import help.PasswordNew;
 import mappers.DBMapper;
@@ -45,6 +46,10 @@ public class RegisterController extends Controller {
 
             req.getSession().setAttribute("user_id", user.getId());
             resp.sendRedirect(req.getContextPath() + "/home");
+    }
 
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }

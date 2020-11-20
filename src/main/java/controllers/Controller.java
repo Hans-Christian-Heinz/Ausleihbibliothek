@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 
 import db.DatabaseHelper;
 import exceptions.DBMapperException;
+import exceptions.HttpMethodNotAllowedException;
 import help.CSRFHelper;
 import help.UserHelp;
 import models.User;
@@ -225,6 +226,40 @@ public abstract class Controller extends HttpServlet {
     }
 
     protected abstract void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, DBMapperException, InvalidKeySpecException, NoSuchAlgorithmException;
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //this does make sense but I don't want to bother conforming to the rules for an exercise-project
+        /*resp.setHeader("Content-Security-Policy",
+                "default-src 'self'; " +
+                        "img-src 'none'; " +
+                        "object-src 'none'; " +
+                        "script-src 'self' code.jquery.com cdn.jsdelivr.net; " +
+                        "style-src 'self' cdn.jsdelivr.net unsafe-inline"
+        );*/
+
+        HttpSession session = req.getSession();
+        UserHelp.refreshUser(session);
+        if (! istBerechtigt(session)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, accessMsg);
+            return;
+        }
+
+        try {
+            handleDelete(req, resp);
+        } catch (HttpMethodNotAllowedException e) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+        } catch (DBMapperException e) {
+            req.setAttribute("tpl", "errors/mapperError.jsp");
+            req.setAttribute("message", e.getMessage());
+
+            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/layout.jsp");
+            dispatcher.forward(req, resp);
+        }
+    }
+
+    protected abstract void handleDelete(HttpServletRequest req, HttpServletResponse resp)
+            throws DBMapperException, HttpMethodNotAllowedException, IOException;
 
     private boolean istBerechtigt(HttpSession session) {
         User user = UserHelp.getUser(session);

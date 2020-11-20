@@ -1,13 +1,13 @@
 package controllers.profile;
 
 import controllers.Controller;
+import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import help.PasswordNew;
 import help.UserHelp;
 import mappers.UserMapper;
 import models.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,7 +25,7 @@ public class ChangePasswordController extends Controller {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //get not implemented
         resp.sendRedirect(req.getContextPath() + "/home");
     }
@@ -36,10 +36,10 @@ public class ChangePasswordController extends Controller {
     }
 
     @Override
-    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void handlePost(HttpServletRequest req, HttpServletResponse resp) {
         UserMapper mapper = MappersHelper.userMapper;
         //first: validate the password_old (Rest der Validierung passiert in der Superklasse Controller
-        HttpSession session = req.getSession();;
+        HttpSession session = req.getSession();
         User user = UserHelp.getUser(session);
         try {
             if (PasswordNew.validatePassword(req.getParameter("password_old"), user.getPassword())) {
@@ -55,7 +55,13 @@ public class ChangePasswordController extends Controller {
             //redirect back
             resp.sendRedirect((String) req.getAttribute("redirect"));
         } catch (Exception e) {
+            //todo
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
+        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
     }
 }
