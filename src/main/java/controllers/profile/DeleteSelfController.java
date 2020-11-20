@@ -35,15 +35,7 @@ public class DeleteSelfController extends Controller {
 
     @Override
     protected void handlePost(HttpServletRequest req, HttpServletResponse resp) throws IOException, DBMapperException {
-        HttpSession session = req.getSession();
-        User user = UserHelp.getUser(session);
-
-        UserMapper mapper = MappersHelper.userMapper;
-        mapper.delete(BigInteger.valueOf(user.getId().longValue()));
-        session.invalidate();
-
-        //redirect back
-        resp.sendRedirect(req.getContextPath() + "/home");
+        //do nothing
     }
 
     @Override
@@ -55,6 +47,7 @@ public class DeleteSelfController extends Controller {
         mapper.delete(BigInteger.valueOf(user.getId().longValue()));
         session.invalidate();
 
+        resp.addHeader("redirectTo", req.getContextPath() + "/home");
         resp.getWriter().print(true);
     }
 }

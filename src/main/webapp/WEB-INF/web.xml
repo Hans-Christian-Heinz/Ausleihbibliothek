@@ -153,16 +153,6 @@
         <url-pattern>/admin/users/changeRole</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>delete-user-controller</servlet-name>
-        <servlet-class>
-            controllers.admin.users.DeleteUserController
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delete-user-controller</servlet-name>
-        <url-pattern>/admin/users/delete</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>admin-book-controller</servlet-name>
         <servlet-class>
             controllers.admin.books.AdminBookController
@@ -171,15 +161,5 @@
     <servlet-mapping>
         <servlet-name>admin-book-controller</servlet-name>
         <url-pattern>/admin/books</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>delete-book-controller</servlet-name>
-        <servlet-class>
-            controllers.admin.books.DeleteBookController
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delete-book-controller</servlet-name>
-        <url-pattern>/admin/books/delete</url-pattern>
     </servlet-mapping>
 </web-app>

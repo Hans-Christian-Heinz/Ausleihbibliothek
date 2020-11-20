@@ -4,11 +4,14 @@ import controllers.Controller;
 import exceptions.DBMapperException;
 import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
+import help.UserHelp;
 import mappers.UserMapper;
+import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -44,7 +47,13 @@ public class DeleteUserController extends Controller {
     }
 
     @Override
-    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
-        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException, IOException {
+        long uid = Long.parseLong(req.getParameter("uid"));
+
+        UserMapper mapper = MappersHelper.userMapper;
+        mapper.delete(BigInteger.valueOf(uid));
+
+        resp.addHeader("redirectTo", req.getContextPath() + "/admin/users");
+        resp.getWriter().print(true);
     }
 }

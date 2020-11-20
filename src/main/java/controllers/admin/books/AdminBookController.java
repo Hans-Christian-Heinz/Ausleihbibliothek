@@ -6,6 +6,7 @@ import exceptions.HttpMethodNotAllowedException;
 import help.MappersHelper;
 import mappers.BookMapper;
 import mappers.DBMapper;
+import mappers.UserMapper;
 import models.Book;
 import models.DBModel;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -55,7 +57,13 @@ public class AdminBookController extends Controller {
     }
 
     @Override
-    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws HttpMethodNotAllowedException {
-        throw new HttpMethodNotAllowedException(HttpMethodNotAllowedException.Methods.DELETE);
+    protected void handleDelete(HttpServletRequest req, HttpServletResponse resp) throws DBMapperException, IOException {
+        long bid = Long.parseLong(req.getParameter("bid"));
+
+        BookMapper mapper = MappersHelper.bookMapper;
+        mapper.delete(BigInteger.valueOf(bid));
+
+        resp.addHeader("redirectTo", req.getContextPath() + "/admin/books");
+        resp.getWriter().print(true);
     }
 }

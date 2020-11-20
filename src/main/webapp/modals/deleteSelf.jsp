@@ -36,8 +36,8 @@
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
                 <!-- Im Skript delete.js wird eine delete-request gesendet -->
-                <a type="button" data-prefix="<%= prefix %>" data-redirect="/home" href="/profile/delete" class="btn btn-danger" id="deleteSelf">
-                    Benutzerprofil löschen DELETE
+                <a type="button" href="<%= prefix %>/profile/delete" class="btn btn-danger delete-link">
+                    Benutzerprofil löschen
                 </a>
             </div>
         </div>

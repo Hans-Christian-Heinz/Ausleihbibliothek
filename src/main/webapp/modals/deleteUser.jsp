@@ -29,11 +29,11 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link text-secondary" data-dismiss="modal">Abbrechen</button>
 
-                <form class="form" action="<%= prefix %>/admin/users/delete" method="POST">
-                    <input type="hidden" name="<%= CSRFHelper.CSRF_TOKEN %>" value="<%= CSRFHelper.getToken(session) %>"/>
-                    <input type="hidden" name="id" value="<%= request.getParameter("uid") %>"/>
-                    <button type="submit" class="btn btn-danger">Benutzerprofil löschen</button>
-                </form>
+                <!-- Im Skript delete.js wird eine delete-request gesendet -->
+                <a type="button" href="<%= prefix %>/admin/users?uid=<%= request.getParameter("uid") %>"
+                   class="btn btn-danger delete-link">
+                    Benutzerprofil löschen
+                </a>
             </div>
         </div>
     </div>
