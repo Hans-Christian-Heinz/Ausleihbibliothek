@@ -28,17 +28,21 @@
     <div class="card-body">
         <table class="table table-bordered table-striped table-hover text-center">
             <tr>
-                <th style="width: 30%"><label for="name">Name</label></th>
-                <th style="width: 30%"><label for="author">Autor</label></th>
-                <th style="width: 30%">Ausgeliehen von</th>
-                <th style="width: 10%">Löschen</th>
+                <th style="width: 25%"><label for="name">Name</label></th>
+                <th style="width: 25%"><label for="author">Autor</label></th>
+                <th style="width: 25%">Ausgeliehen von</th>
+                <th style="width: 12.5%">Bearbeiten</th>
+                <th style="width: 12.5%">Löschen</th>
             </tr>
             <% for (DBModel model : books) { %>
                 <% Book book = (Book) model; %>
                 <tr>
-                    <td><%= book.getName() %></td>
-                    <td><%= book.getAuthor() %></td>
-                    <td><%= book.getRelValue("owner") == null ? "-" : Encode.forHtml(((User)book.getRelValue("owner")).getFullName()) %></td>
+                    <td class="text-left"><%= book.getName() %></td>
+                    <td class="text-left"><%= book.getAuthor() %></td>
+                    <td class="text-left"><%= book.getRelValue("owner") == null ? "-" : Encode.forHtml(((User)book.getRelValue("owner")).getFullName()) %></td>
+                    <td>
+                        <a href="#editBookModal<%= model.getId()%>" data-toggle="modal" class="btn btn-sm btn-secondary">Bearbeiten</a>
+                    </td>
                     <td>
                         <a href="#deleteBookModal<%= model.getId() %>" data-toggle="modal" class="btn btn-sm btn-outline-danger">Löschen</a>
                     </td>
@@ -92,5 +96,10 @@
 <jsp:include page="/modals/deleteBook.jsp">
     <jsp:param name="bid" value="<%= model.getId() %>"/>
     <jsp:param name="name" value="<%= ((Book)model).getName() %>"/>
+</jsp:include>
+<jsp:include page="/modals/editBook.jsp">
+    <jsp:param name="bid" value="<%= model.getId() %>"/>
+    <jsp:param name="name" value="<%= ((Book)model).getName() %>"/>
+    <jsp:param name="author" value="<%= ((Book)model).getAuthor() %>"/>
 </jsp:include>
 <% } %>

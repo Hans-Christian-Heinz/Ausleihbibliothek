@@ -173,6 +173,16 @@
         <url-pattern>/admin/books</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>edit-book-controller</servlet-name>
+        <servlet-class>
+            controllers.admin.books.EditBookController
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>edit-book-controller</servlet-name>
+        <url-pattern>/admin/books/edit</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>delete-book-controller</servlet-name>
         <servlet-class>
             controllers.admin.books.DeleteBookController
