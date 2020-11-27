@@ -1,11 +1,12 @@
-<%@ page import="help.CSRFHelper" %>
-<%@ page import="org.owasp.encoder.Encode" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: h.heinz
   Date: 16.11.20
   Time: 15:37
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="help.CSRFHelper" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

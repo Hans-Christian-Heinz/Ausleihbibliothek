@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS bibliothek;
 use bibliothek;
 
 DROP TABLE IF EXISTS books;
